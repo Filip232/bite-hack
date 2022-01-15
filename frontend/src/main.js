@@ -12,8 +12,6 @@ Vue.use(CarbonComponentsVue);
 axios.defaults.baseURL = localIp;
 axios.defaults.headers.post['crossDomain'] = 'true';
 
-Vue.use(CarbonComponentsVue);
-
 Vue.config.productionTip = false
 
 new Vue({

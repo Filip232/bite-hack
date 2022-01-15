@@ -29,8 +29,6 @@ time, mark, audio, video {
 	font-size: 100%;
 	font: inherit;
 	vertical-align: baseline;
-  //background-color: $background-active;
-  // background-color: red;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
@@ -43,12 +41,7 @@ body {
 	background-image: url('./assets/background.png');
 	min-height: 100vh;
 	position: relative;
-}
-
-body::after {
-	content: '';
-	display: block;
-	height: 90px;
+	padding-bottom: 90px;
 }
 
 ol, ul {
