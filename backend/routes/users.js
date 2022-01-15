@@ -76,8 +76,6 @@ router.post('/postReview', (req, res) => {
   const comment = req.body.comment;
   const token = req.body.token;
 
-
-  console.log('test2');
   if (!posterId || !reviewedId || !token || !rating) return res.status(401).send({msg: 'Missing data. Check input.'});
   if (posterId === reviewedId) return res.status(401).send({msg: 'User cannot review himself.'});
 
@@ -155,7 +153,7 @@ router.get('/:id', (req, res) => {
 
   User.findById(user, (err, obj) => {
     if (err) return console.log(err);
-    return res.status(200).send({name: obj.name, surname: obj.surname, username:obj.username, created: obj.created, email: obj.email, tel: obj.tel});
+    return res.status(200).send({name: obj.name, surname: obj.surname, username:obj.username, created: obj.created, email: obj.email, tel: obj.tel, imagePath: obj.imagePath});
   })
 });
 
