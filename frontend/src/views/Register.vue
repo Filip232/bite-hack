@@ -1,16 +1,14 @@
 <template>
-    <div>
-    </div>
+  <RegisterPage />
 </template>
+
 <script>
-import axios from 'axios';
+import RegisterPage from '@/components/RegisterPage.vue'
 
 export default {
-    name: 'Register',
-
-    async mounted() {
-        const { data } = await axios.get('users');
-        console.log(data);
-    }
+  name: 'Register',
+  components: {
+    RegisterPage
+  }
 }
 </script>

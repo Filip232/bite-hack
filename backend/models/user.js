@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const Review = require('../models/review');
 
 const userSchema = new Schema({
   name: {type: String, required: true, minLength: 3, maxLength: 100},
@@ -9,13 +10,9 @@ const userSchema = new Schema({
   created: {type: Date, default: Date.now()},
   email: {type: String, required: true, unique: true},
   sessionToken: {type: String},
-  tel: {type: String, minlength: 6, maxlength: 20}
+  tel: {type: String, minlength: 6, maxlength: 20},
+  imagePath: {type: String, default: 'http://localhost:3000/img/defaultAvatar.png'},
+  avgRating: {type: Number, default: -1}
 });
-
-userSchema
-  .virtual('getProducts')
-  .get( () => {
-    return this.products;
-  });
 
 module.exports = mongoose.model('User', userSchema); 
