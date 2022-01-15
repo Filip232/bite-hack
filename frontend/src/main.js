@@ -3,13 +3,12 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import axios from 'axios';
-import localIp from '@/utils/localIp';
-
-console.log(localIp);
-axios.defaults.baseURL = localIp;
-axios.defaults.headers.post['crossDomain'] = 'true';
+import localIp from '@/utils/localIp'
 import "carbon-components/css/carbon-components.min.css";
 import CarbonComponentsVue from "@carbon/vue";
+
+axios.defaults.baseURL = localIp;
+axios.defaults.headers.post['crossDomain'] = 'true';
 
 Vue.use(CarbonComponentsVue);
 
