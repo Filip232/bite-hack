@@ -14,7 +14,7 @@
                     <span><span :class="$styleUtils['bold']">Email:</span> {{ userDetails.email }}</span>
                     <span><span :class="$styleUtils['bold']">Telephone:</span> {{ userDetails.tel }}</span>
                     <span><span :class="$styleUtils['bold']">Profile was created at:</span> {{ userDetails.created }}</span>
-                    <span><span :class="$styleUtils['bold']">Average rating: </span> {{ userDetails.avgRating }}</span>
+                    <span><span :class="$styleUtils['bold']">Average rating: </span> {{ userDetails.avgRating === -1 ? 'This user has no ratings': userDetails.avgRating }}</span>
                     <CvButton v-if="!isMy" :class="$styleUtils['mt-6']">
                         <router-link :to="`/users/${this.$route.params.id}/edit`" class="edit-profile">Edit profile info</router-link>
                     </CvButton>
@@ -23,19 +23,32 @@
         </div>
         <div class="comments pt-80">
             <h2>Comments</h2>
+    <button @click="showModal">Show</button>
+    <CvModal
+      buttonTriggerText="Launch modal"
+      modalHeading="Modal heading"
+      modalLabel="Label"
+      :visible="addCommentVisible"
+      @modal-hidden="addCommentVisible = false"
+    >
+        <template #content>
+            Siema
+        </template>
+    </CvModal>
         </div>
     </div>
 </template>
 <script>
 import axios from 'axios';
 import dayjs from 'dayjs';
-import { CvLoading, CvButton } from '@carbon/vue/src';
+import { CvLoading, CvButton, CvModal } from '@carbon/vue/src';
 
 export default {
     name: 'UserProfile',
     components: {
         CvLoading,
         CvButton,
+        CvModal,
     },
     data() {
         return {
@@ -50,21 +63,28 @@ export default {
             },
             isLoading: false,
             isMy: this.$store.state.user.id === this.$route.params.id,
+            addCommentVisible: false,
+            console,
         };
     },
     async created() {
         this.isLoading = true;
-        const { data } = await axios.get(`users/${this.$route.params.id}`);
+        const userInfo = await axios.get(`users/${this.$route.params.id}`);
+        this.userDetails.name = userInfo.data.name;
+        this.userDetails.surname = userInfo.data.surname;
+        this.userDetails.email = userInfo.data.email;
+        this.userDetails.tel = userInfo.data.tel;
+        this.userDetails.created = dayjs(userInfo.data.created).format('D MMMM YYYY');
+        this.userDetails.imagePath = userInfo.data.imagePath;
+        this.userDetails.avgRating = userInfo.data.avgRating;
 
-        this.userDetails.name = data.name;
-        this.userDetails.surname = data.surname;
-        this.userDetails.email = data.email;
-        this.userDetails.tel = data.tel;
-        this.userDetails.created = dayjs(data.created).format('D MMMM YYYY');
-        this.userDetails.imagePath = data.imagePath;
-        this.userDetails.avgRating = data.avgRating;
         this.isLoading = false;
-    }
+    },
+    methods: {
+        showModal() {
+            this.addCommentVisible = true;
+        },
+    },
 }
 </script>
 
