@@ -1,9 +1,6 @@
 <template>
   <div>
     <MainPage />
-    <span class="andziej">
-      LALalala
-    </span>
   </div>
 </template>
 
@@ -23,11 +20,3 @@ export default {
 
 }
 </script>
-
-<style lang="scss" scoped>
-@import '@carbon/themes/scss/themes';
-
-.andziej {
-  color: $active-01;
-}
-</style>
