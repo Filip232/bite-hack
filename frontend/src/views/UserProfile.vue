@@ -14,14 +14,15 @@
                     <span><span :class="$styleUtils['bold']">Email:</span> {{ userDetails.email }}</span>
                     <span><span :class="$styleUtils['bold']">Telephone:</span> {{ userDetails.tel }}</span>
                     <span><span :class="$styleUtils['bold']">Profile was created at:</span> {{ userDetails.created }}</span>
+                    <span><span :class="$styleUtils['bold']">Average rating: </span> {{ userDetails.avgRating }}</span>
                     <CvButton v-if="!isMy" :class="$styleUtils['mt-6']">
                         <router-link :to="`/users/${this.$route.params.id}/edit`" class="edit-profile">Edit profile info</router-link>
                     </CvButton>
                 </div>
             </div>
         </div>
-        <div class="comments">
-
+        <div class="comments pt-80">
+            <h2>Comments</h2>
         </div>
     </div>
 </template>
@@ -45,6 +46,7 @@ export default {
                 created: null,
                 tel: null,
                 imagePath: null,
+                avgRating: null,
             },
             isLoading: false,
             isMy: this.$store.state.user.id === this.$route.params.id,
@@ -60,6 +62,7 @@ export default {
         this.userDetails.tel = data.tel;
         this.userDetails.created = dayjs(data.created).format('D MMMM YYYY');
         this.userDetails.imagePath = data.imagePath;
+        this.userDetails.avgRating = data.avgRating;
         this.isLoading = false;
     }
 }
@@ -76,7 +79,7 @@ export default {
 
 .wrapper {
     width: 80%;
-    padding: 50px 0;
+    padding: 50px 0 80px;
     margin: 0 auto;
 }
 .profile-wrapper {
@@ -119,6 +122,12 @@ h1 {
 .img-update {
     text-decoration: underline;
     cursor: pointer;
+}
+
+.comments {
+    width: 80%;
+    margin: 0 auto;
+    border-top: thin solid $text-04;
 }
 </style>
 

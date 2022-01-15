@@ -31,7 +31,10 @@
                 :invalid-message="passwordInvalid"
                 @blur="passwordValidation"
             />
-            <CvButton :class="$styleUtils['mt-6']" class="login-btn">Log in <CvLoading v-if="isLoading" :active="isLoading" class="loading"/></CvButton>
+            <CvButton :class="$styleUtils['mt-6']" class="login-btn">
+                    Log in
+                    <CvLoading v-if="isLoading" :active="isLoading" :class="$styleUtils['loading-small']"/>
+                </CvButton>
         </CvForm>
         <div class="navigation">
             <router-link to="/" v-text="'Back to home page'" :class="$styleUtils['p-2']" />
@@ -117,11 +120,6 @@ export default {
 
 .login-btn {
     width: 100%;
-}
-
-.loading {
-    height: 20px;
-    width: 20px;
 }
 
 @media (min-width: 800px) {
