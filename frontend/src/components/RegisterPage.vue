@@ -1,25 +1,11 @@
 <template>
-  <div :class="$style['wrapper']" @keyup.enter.stop.prevent="register">
-    <CvForm :class="$style['register-box']" @submit.prevent="register">
-      <h2 :class="$style['h2']">Register</h2>
-      <p :class="$style['input-title']">Email</p>
-      <CvTextInput type="email" v-model="form.userEmail" placeholder="Email" :invalid-message="formErrors.invalidEmail" @blur="checkEmailValidation"></CvTextInput>
-      <p :class="$style['input-title']">Username</p>
-      <CvTextInput v-model="form.username" placeholder="Nickname" :invalid-message="formErrors.invalidUsername" @blur="checkUsernameValidation"></CvTextInput>
-      <p :class="$style['input-title']">First Name</p>
-      <CvTextInput v-model="form.name" placeholder="Name" :invalid-message="formErrors.invalidName" @blur="checkNameValidation"></CvTextInput>
-      <p :class="$style['input-title']">Surname</p>
-      <CvTextInput v-model="form.surname" placeholder="Surname" :invalid-message="formErrors.invalidSurname" @blur="checkSurnameValidation"></CvTextInput>
-      <p :class="$style['input-title']">Password</p>
-      <CvTextInput v-model="form.password" placeholder="Password" :invalid-message="formErrors.invalidPassword" @blur="checkPasswordValidation"></CvTextInput>
-      <CvButton>Create Account</CvButton>
-    </CvForm>
+  <div :class="$style['wrapper']">
     <CvToastNotification
       :class="[
-        $style['notification'],
+        $styleUtils['notification'],
         {
-          [$style['notification--opened']]: serverError,
-          [$style['notification--closed']]: !serverError
+          [$styleUtils['notification--opened']]: serverError,
+          [$styleUtils['notification--closed']]: !serverError
         },
       ]"
       kind="error"
@@ -27,12 +13,26 @@
       :caption="serverError"
       @close="serverError = null"
     />
+    <CvForm :class="$style['register-box']" @submit.prevent="register">
+      <h2 :class="$style['h2']">Register</h2>
+      <CvTextInput :class="$style['input']" label="Email" type="email" v-model="form.userEmail" placeholder="Email" :invalid-message="formErrors.invalidEmail" @blur="checkEmailValidation"></CvTextInput>
+      <CvTextInput :class="$style['input']" label="Username" v-model="form.username" placeholder="Username" :invalid-message="formErrors.invalidUsername" @blur="checkUsernameValidation"></CvTextInput>
+      <CvTextInput :class="$style['input']" label="Name" v-model="form.name" placeholder="Name" :invalid-message="formErrors.invalidName" @blur="checkNameValidation"></CvTextInput>
+      <CvTextInput :class="$style['input']" label="Surname" v-model="form.surname" placeholder="Surname" :invalid-message="formErrors.invalidSurname" @blur="checkSurnameValidation"></CvTextInput>
+      <CvTextInput :class="$style['input']" label="Password" type="password" v-model="form.password" placeholder="Password" :invalid-message="formErrors.invalidPassword" @blur="checkPasswordValidation"></CvTextInput>
+      <CvButton :class="$styleUtils['mt-6']">Create Account</CvButton>
+    </CvForm>
+    <div :class="$style['navigation']">
+        <router-link to="/home" v-text="'Back to home page'" :class="$styleUtils['p-2']" />
+        <router-link to="/login" v-text="'Do you have account? Sign in!'" :class="$styleUtils['p-2']" />
+    </div>
   </div>
 </template>
 
 <script>
-import { CvButton, CvTextInput, CvForm, CvToastNotification } from '@carbon/vue'
+import { CvButton, CvTextInput, CvForm } from '@carbon/vue'
 import axios from 'axios';
+import { CvToastNotification } from '@carbon/vue'
 
 export default {
   name: 'RegisterPage',
@@ -130,23 +130,22 @@ export default {
 }
 </script>
 
+<style lang="scss" src="@/assets/utils.module.scss" module="$styleUtils"></style>
+
 <style lang="scss" module>
 @use 'sass:map';
 
 @import '@carbon/themes/scss/themes';
 @import '@/assets/_variables';
 
-.h2 {
-  font-size: 20px;
-}
-
-.input-title {
-  padding: map.get($spacings, 5) 0 0;
+.input {
+  padding: map.get($spacings, 4) 0 0;
 }
 
 .wrapper {
   display: flex;
-  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   width: 100%;
   height: 100%;
   // color: $primary;
@@ -154,22 +153,16 @@ export default {
 }
 
 .register-box {
-  margin-top: map.get($spacings, 8);
+  margin-top: $spacing-08;
   width: 50%;
   height: 50%;
   // background-color: $secondary;
 }
 
-.notification {
-  position: absolute;
-  top: 5%;
-  right: 5%;
-  transition: 0.3s;
-  opacity: 0;
-
-  &--opened {
-    opacity: 1;
-    transition: 0.3s;
-  }
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  width: 50%;
+  margin: $spacing-08 auto 0;
 }
 </style>

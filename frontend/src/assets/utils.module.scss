@@ -16,6 +16,10 @@
   margin-top: $spacing-06;
 }
 
+.mx-auto {
+  margin: auto;
+}
+
 .p-2 {
   padding: $spacing-02;
 }
@@ -26,6 +30,7 @@
   right: 5%;
   transition: 0.3s;
   opacity: 0;
+  z-index: 20;
 
   &--opened {
     opacity: 1;
