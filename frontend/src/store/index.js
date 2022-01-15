@@ -10,14 +10,16 @@ export default new Vuex.Store({
       username: null,
       token: null,
       id: null,
+      imagePath: null
     }
   },
   mutations: {
-    saveUserData(state, { email, username, token, id }) {
+    saveUserData(state, { email, username, token, id, imagePath }) {
       state.user.username = username;
       state.user.email = email;
       state.user.token = token;
       state.user.id = id;
+      state.user.imagePath = imagePath
     }
   },
   actions: {

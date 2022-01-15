@@ -31,16 +31,19 @@
                 :invalid-message="passwordInvalid"
                 @blur="passwordValidation"
             />
-            <CvButton :class="$styleUtils['mt-6']" class="login-btn">Log in</CvButton>
+            <CvButton :class="$styleUtils['mt-6']" class="login-btn">
+                    Log in
+                    <CvLoading v-if="isLoading" :active="isLoading" :class="$styleUtils['loading-small']"/>
+                </CvButton>
         </CvForm>
         <div class="navigation">
-            <router-link to="/home" v-text="'Back to home page'" :class="$styleUtils['p-2']" />
-            <router-link to="/register" v-text="'Do not have account yet? Sign up!'" :class="$styleUtils['p-2']" />
+            <router-link to="/" v-text="'Back to home page'" :class="$styleUtils['p-2']" />
+            <router-link to="/register" v-text="'Do not have account yet? Sign up!'" :class="$styleUtils['p-4']" />
         </div>
     </div>
 </template>
 <script>
-import { CvForm, CvTextInput, CvToastNotification } from '@carbon/vue/src';
+import { CvForm, CvTextInput, CvToastNotification, CvLoading } from '@carbon/vue/src';
 import axios from 'axios';
 
 export default {
@@ -49,6 +52,7 @@ export default {
         CvForm,
         CvTextInput,
         CvToastNotification,
+        CvLoading
     },
     data() {
         return {
@@ -59,6 +63,7 @@ export default {
             emailInvalid: null,
             passwordInvalid: null,
             serverError: null,
+            isLoading: false,
         }
     },
     methods: {
@@ -67,14 +72,19 @@ export default {
             this.passwordValidation();
             if (this.form.login === '' || this.form.password === '') return;
             this.serverError = null;
+            this.isLoading = true;
             const { data } = await axios.post('users/login', {
-                username: this.form.email,
+                email: this.form.email,
                 password: this.form.password
-            }).catch(err => this.serverError = err.response.data.msg);
+            }).catch(err => {
+                this.serverError = err.response.data.msg;
+                this.isLoading = false;
+            });
             if (this.serverError) return;
 
             this.$store.commit('saveUserData', data);
-            this.$router.push('/elo');
+            this.isLoading = false;
+            this.$router.push('/');
         },
         emailValidation() {
             if(this.form.email === '') this.emailInvalid = 'Email is required';
@@ -103,7 +113,7 @@ export default {
 
 .navigation {
     display: flex;
-    justify-content: space-between;
+    flex-flow: column;
     width: 90%;
     margin: $spacing-08 auto 0;
 }
@@ -119,6 +129,9 @@ export default {
 
     .navigation {
         width: 60%;
+        flex-flow: row;
+        align-items: center;
+        justify-content: space-between;
     }
 
     .login-btn {
