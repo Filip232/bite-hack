@@ -32,7 +32,7 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
 	line-height: 1;
-	font-family: 'Roboto', '';
+	font-family: 'Roboto', 'Tahoma', 'sans-serif';
 }
 ol, ul {
 	list-style: none;
