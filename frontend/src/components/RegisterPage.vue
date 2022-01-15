@@ -13,9 +13,9 @@
       :caption="serverError"
       @close="serverError = null"
     />
-    <CvForm :class="$style['register-box']" @submit.prevent="register">
+    <CvForm :class="$style['register-box']" @submit.prevent="createAccount">
       <h2 :class="$style['h2']">Register</h2>
-      <CvTextInput :class="$style['input']" label="Email" type="email" v-model="form.userEmail" placeholder="Email" :invalid-message="formErrors.invalidEmail" @blur="checkEmailValidation"></CvTextInput>
+      <CvTextInput :class="$style['input']" label="Email" type="email" v-model="form.email" placeholder="Email" :invalid-message="formErrors.invalidEmail" @blur="checkEmailValidation"></CvTextInput>
       <CvTextInput :class="$style['input']" label="Username" v-model="form.username" placeholder="Username" :invalid-message="formErrors.invalidUsername" @blur="checkUsernameValidation"></CvTextInput>
       <CvTextInput :class="$style['input']" label="Name" v-model="form.name" placeholder="Name" :invalid-message="formErrors.invalidName" @blur="checkNameValidation"></CvTextInput>
       <CvTextInput :class="$style['input']" label="Surname" v-model="form.surname" placeholder="Surname" :invalid-message="formErrors.invalidSurname" @blur="checkSurnameValidation"></CvTextInput>
@@ -45,11 +45,11 @@ export default {
   data() {
     return {
       form: {
-        userEmail: null,
+        email: null,
         username: null,
-        password: null,
         name: null,
-        surname: null
+        surname: null,
+        password: null
       },
       formErrors: {
         invalidEmail: null,
@@ -63,20 +63,27 @@ export default {
   },
   methods: {
     async register() {
+      this.serverError = null
+      await axios.post('users/register', this.form)
+        .catch((error) => this.serverError = error.response.data.msg)
+      if (!this.serverError) {
+        this.$router.push('/login');
+      }
+    },
+    createAccount() {
       this.checkEmailValidation();
       this.checkUsernameValidation();
       this.checkNameValidation();
       this.checkSurnameValidation();
       this.checkPasswordValidation();
-      this.serverError = null
-      await axios.post('users/register', this.form)
-        .catch((error) => this.serverError = error.response.data.msg[0])
-      if (!this.serverError) {
-        this.$router.push('/login');
+      console.log(this.formErrors.invalidEmail, this.formErrors.invalidUsername, this.formErrors.invalidName, this.formErrors.invalidSurname, this.formErrors.invalidPassword)
+      if(!this.formErrors.invalidEmail && !this.formErrors.invalidUsername && !this.formErrors.invalidName && !this.formErrors.invalidSurname && !this.formErrors.invalidPassword) {
+        console.log('should registerrrrrrr')
+        this.register();
       }
     },
     checkEmailValidation() {
-      if(!this.form.userEmail) {
+      if(!this.form.email) {
         this.formErrors.invalidEmail = 'Email required';
       } else {
         this.formErrors.invalidEmail = null;
@@ -85,8 +92,6 @@ export default {
     checkUsernameValidation() {
       if(!this.form.username) {
         this.formErrors.invalidUsername = 'Username required';
-      } else if (this.form.username.length < 6) {
-        this.formErrors.invalidUsername = 'Username should have at least 5 characters';
       } else {
         this.formErrors.invalidUsername = null;
       }
@@ -94,8 +99,6 @@ export default {
     checkNameValidation() {
       if(!this.form.name) {
         this.formErrors.invalidName = 'Name required';
-      } else if (this.form.name.length < 4) {
-        this.formErrors.invalidName = 'Name should have at least 3 characters';
       } else if (!/^[A-Z]+$/.test(this.form.name[0])) {
         this.formErrors.invalidName = 'Name should be capitalized';
       } else if (!/^[a-z ,.'-]+$/.test(this.form.name.substring(1))) {
@@ -107,8 +110,6 @@ export default {
     checkSurnameValidation() {
       if(!this.form.surname) {
         this.formErrors.invalidSurname = 'Surname required';
-      } if (this.form.surname.length < 4) {
-        this.formErrors.invalidSurname = 'Surname should have at least 3 characters';
       } else if (!/^[A-Z]+$/.test(this.form.surname[0])) {
         this.formErrors.invalidSurname = 'Surnameame should be capitalized';
       } else if (!/^[a-z ,.'-]+$/.test(this.form.surname.substring(1))) {
@@ -120,8 +121,6 @@ export default {
     checkPasswordValidation() {
       if(!this.form.password) {
         this.formErrors.invalidPassword = 'Password required';
-      } else if (this.form.password.length < 4) {
-        this.formErrors.invalidPassword = 'Surname should have at least 3 characters';
       } else {
         this.formErrors.invalidPassword = null;
       }
@@ -154,15 +153,15 @@ export default {
 
 .register-box {
   margin-top: $spacing-08;
-  width: 50%;
-  height: 50%;
+  width: 40%;
+  height: 40%;
   // background-color: $secondary;
 }
 
 .navigation {
   display: flex;
   justify-content: space-between;
-  width: 50%;
+  width: 40%;
   margin: $spacing-08 auto 0;
 }
 </style>

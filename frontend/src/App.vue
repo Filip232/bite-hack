@@ -29,7 +29,6 @@ time, mark, audio, video {
 	font-size: 100%;
 	font: inherit;
 	vertical-align: baseline;
-  // background-color: red;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
@@ -39,7 +38,12 @@ footer, header, hgroup, menu, nav, section {
 body {
 	line-height: 1;
 	font-family: 'Roboto', 'Tahoma', 'sans-serif';
+	background-image: url('./assets/background.png');
+	min-height: 100vh;
+	position: relative;
+	padding-bottom: 90px;
 }
+
 ol, ul {
 	list-style: none;
 }
@@ -50,6 +54,9 @@ blockquote:before, blockquote:after,
 q:before, q:after {
 	content: '';
 	content: none;
+}
+svg {
+	color: currentColor;
 }
 table {
 	border-collapse: collapse;

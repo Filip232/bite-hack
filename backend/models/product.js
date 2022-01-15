@@ -6,7 +6,8 @@ const productSchema = new Schema({
   images: [{type: String, minlength: 6, maxlength: 300}],
   ownerId: {type: Schema.Types.ObjectId, required: true},
   location: {type: String, required: true},
-  description: {type: String, required: true, minlength: 10, maxlength: 5000}
+  description: {type: String, required: true, minlength: 10, maxlength: 5000},
+  category: {type: String, required: true}
 });
 
 
