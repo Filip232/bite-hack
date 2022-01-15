@@ -56,7 +56,6 @@ router.post('/login', (req, res) => {
           const token1 = Math.random().toString(36);
           const token2 = Math.random().toString(36);
           const token = token1 + token2;
-
           bcrypt.hash(token, 12, (err, hash) => {
               if (err) return console.log(err);
               obj.sessionToken = hash;
