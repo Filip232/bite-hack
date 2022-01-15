@@ -22,11 +22,11 @@ router.post('/register', (req, res) => {
       }
 
       if (obj) {
-          return res.status(400).send({msg: ['User already exists.']});
+          return res.status(400).send({msg: 'User already exists.'});
       }
 
       if (password.length < 8 || !/\d/.test(password)) {
-          return res.status(400).send({msg: ["Password needs to be at least 8 characters long and have at least 1 number."]})
+          return res.status(400).send({msg: "Password needs to be at least 8 characters long and have at least 1 number."})
       }
       bcrypt.hash(password, 12, (err, password) => {
           if (err) return console.log(err);
@@ -46,13 +46,13 @@ router.post('/login', (req, res) => {
       if (err) return console.log(err);
 
       if (!obj || obj.email !== email) {
-          return res.status(400).send({msg: ['Wrong email or password.']});
+          return res.status(400).send({msg: 'Wrong email or password.'});
       }
 
       bcrypt.compare(password, obj.password, (err, result) => {
           if (err) console.log(err);
 
-          if (!result) return res.status(400).send({msg: ['Wrong email or password.']});
+          if (!result) return res.status(400).send({msg: 'Wrong email or password.'});
               
           const token1 = Math.random().toString(36);
           const token2 = Math.random().toString(36);
@@ -76,8 +76,6 @@ router.post('/postReview', (req, res) => {
   const comment = req.body.comment;
   const token = req.body.token;
 
-
-  console.log('test2');
   if (!posterId || !reviewedId || !token || !rating) return res.status(401).send({msg: 'Missing data. Check input.'});
   if (posterId === reviewedId) return res.status(401).send({msg: 'User cannot review himself.'});
 
@@ -155,7 +153,7 @@ router.get('/:id', (req, res) => {
 
   User.findById(user, (err, obj) => {
     if (err) return console.log(err);
-    return res.status(200).send({name: obj.name, surname: obj.surname, username:obj.username, created: obj.created, email: obj.email, tel: obj.tel});
+    return res.status(200).send({name: obj.name, surname: obj.surname, username:obj.username, created: obj.created, email: obj.email, tel: obj.tel, imagePath: obj.imagePath, avgRating: obj.getAverageRating});
   })
 });
 
