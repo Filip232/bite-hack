@@ -1,22 +1,21 @@
 <template>
   <div>
-    <Header :class="$style.header" />
+    <Header />
+    <HeadingText />
+    <Footer />
   </div>
 </template>
 
 <script>
 import Header from '@/components/MainPage/Header/Header.vue'
+import HeadingText from '@/components/MainPage/HeadingText/HeadingText.vue'
+import Footer from '@/components/Footer/Footer.vue'
 export default {
   name: 'MainPage',
   components: {
-    Header
+    Header,
+    Footer,
+    HeadingText
   }
 }
 </script>
-
-<style lang="scss" module>
-.header {
-  display: flex;
-  justify-content: flex-end;
-}
-</style>
