@@ -1,48 +1,37 @@
 <template>
-  <div :class="$style.footer">
-    <div :class="$style['footer__left']">
-      <p>LOGO</p>
-      <a>
-        Privacy Policy
-      </a>
+  <footer :class="$style.footer">
+    <div :class="[$styleUtils['d-f'], $styleUtils['jc-sb']]">
+      <div :class="$style['footer__left']">
+        <img :class="[$style.logo, $styleUtils['mb-3']]" src="@/assets/logo.png" alt="Logo" >
+        <a>
+          Privacy Policy
+        </a>
+      </div>
+      <div :class="[$style['footer__center'], $styleUtils['mb-3']]">
+        <LogoFacebook32 />
+        <LogoTwitter32 :class="$styleUtils['mx-4']" />
+        <LogoGithub32 />
+      </div>
+      <div :class="[$style['footer__left'], $styleUtils['bc-transparent']]">
+        <a>
+          Our vision
+        </a>
+        <a>
+          Team
+        </a>
+      </div>
     </div>
-    <div :class="[$style['footer__center'], $styleUtils['bc-transparent']]">
-      <a :class="[$styleUtils['bc-transparent']]">
-        Our vision
-      </a>
-      <a :class="[$styleUtils['bc-transparent']]">
-        Team
-      </a>
-      <a :class="[$styleUtils['bc-transparent']]">
-        FAQ
-      </a>
-    </div>
-    <div>
-      <LogoFacebook32 />
-      <LogoTwitter32 />
-      <LogoDiscord32 />
-    </div>
-    <div :class="$style['footer__right']">
-      <CvButton>
-        Log in
-      </CvButton>
-      <CvButton>
-        Register
-      </CvButton>
-    </div>
-  </div>
+  </footer>
 </template>
 
 <script>
-import { CvButton } from '@carbon/vue/src';
-import { LogoFacebook32, LogoTwitter32, LogoDiscord32 } from '@carbon/icons-vue';
+import { LogoFacebook32, LogoTwitter32, LogoGithub32 } from '@carbon/icons-vue';
 export default {
   name: 'Footer',
   components: {
-    CvButton,
     LogoFacebook32,
     LogoTwitter32,
-    LogoDiscord32
+    LogoGithub32
   }
 }
 </script>
@@ -54,37 +43,37 @@ export default {
 @import '@carbon/colors/scss/colors';
 
 .footer {
-  position: absolute;
-  bottom: 0;
   width: 100%;
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: space-evenly;
   background-color: $carbon--gray-90;
+  padding: $spacing-03 $spacing-04;
+  position:absolute;
+  bottom: 0;
+  height: 90px;
 
   &__left {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
   }
 
   &__center {
     display: flex;
-    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
   }
 
   &__right {
     display: flex;
     flex-direction: column;
   }
-  // &__buttons {
-  //   display: flex;
-  //   justify-content: flex-end;
-  // }
 
-  // &__info {
-  //   display: flex;
-  //   flex-direction: column;
-  //   align-items: center;
-  // }
+  .logo {
+    width: 50px;
+    height: 50px;
+  }
 }
 </style>

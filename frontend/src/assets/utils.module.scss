@@ -9,12 +9,20 @@
   background-color: transparent;
 }
 
+.mb-3 {
+  margin-bottom: $spacing-03;
+}
+
 .mb-5 {
   margin-bottom: $spacing-05;
 }
 
 .mb-6 {
   margin-bottom: $spacing-06;
+}
+
+.mt-3 {
+  margin-top: $spacing-03;
 }
 
 .mt-4 {
@@ -25,10 +33,39 @@
   margin-top: $spacing-06;
 }
 
+.pt-10 {
+  padding-top: $spacing-10;
+}
+
+.mx-4 {
+  margin-left: $spacing-04;
+  margin-right: $spacing-04;
+}
+
 .d-f {
   display: flex;
 }
 
+.f-col {
+  flex-direction: column;
+}
+
 .jc-fe{
   justify-content: flex-end;
+}
+
+.jc-c {
+  justify-content: center;
+}
+
+.jc-sb {
+  justify-content: space-between;
+}
+
+.ai-c {
+  align-items: center;
+}
+
+.w-100p {
+  width: 100%;
 }

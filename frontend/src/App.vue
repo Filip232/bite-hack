@@ -41,7 +41,16 @@ body {
 	line-height: 1;
 	font-family: 'Roboto', 'Tahoma', 'sans-serif';
 	background-image: url('./assets/background.png');
+	min-height: 100vh;
+	position: relative;
 }
+
+body::after {
+	content: '';
+	display: block;
+	height: 90px;
+}
+
 ol, ul {
 	list-style: none;
 }
