@@ -5,6 +5,8 @@ $secondary:#777;
 $background: #2C302E;
 $error: #B4656F;
 
+$font-size-html: 16;
+
 $spacings: (
   0: 0,
   1: math.div(2, $font-size-html) * 1rem,
