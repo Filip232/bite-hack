@@ -154,6 +154,7 @@ export default {
   flex-direction: column;
   width: 100%;
   height: 100%;
+  padding: 2.5rem 0;
   // color: $primary;
   // background-color: $background;
 }
@@ -161,7 +162,6 @@ export default {
 .register-box {
   margin-top: $spacing-08;
   width: 40%;
-  height: 40%;
   // background-color: $secondary;
 }
 
