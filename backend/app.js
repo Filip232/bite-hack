@@ -4,6 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 const mongoDB = 'mongodb+srv://hackathon-admin:fY7eAs42rcHkB2@cluster0.cen12.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
 
@@ -25,6 +26,7 @@ const usersRouter = require('./routes/users');
 
 const app = express();
 
+app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
