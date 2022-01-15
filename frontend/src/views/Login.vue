@@ -34,7 +34,7 @@
             <CvButton :class="$styleUtils['mt-6']" class="login-btn">Log in <CvLoading v-if="isLoading" :active="isLoading" class="loading"/></CvButton>
         </CvForm>
         <div class="navigation">
-            <router-link to="/home" v-text="'Back to home page'" :class="$styleUtils['p-2']" />
+            <router-link to="/" v-text="'Back to home page'" :class="$styleUtils['p-2']" />
             <router-link to="/register" v-text="'Do not have account yet? Sign up!'" :class="$styleUtils['p-4']" />
         </div>
     </div>
