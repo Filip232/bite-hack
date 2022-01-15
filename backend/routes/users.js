@@ -10,6 +10,7 @@ router.post('/register', (req, res) => {
   const email = req.body.email;
   const name = req.body.name;
   const surname = req.body.surname;
+  const tel = req.body.tel;
 
   console.log(req.body);
 
@@ -30,7 +31,7 @@ router.post('/register', (req, res) => {
       bcrypt.hash(password, 12, (err, password) => {
           if (err) return console.log(err);
 
-          const user = new User({username, password, email, name, surname});
+          const user = new User({username, password, email, name, surname, tel});
           user.save();
           return res.status(201).send({msg: 'User created!'});                    
       });
@@ -147,6 +148,15 @@ router.delete('/deleteReview', (req, res) => {
       });
     });
   });
+});
+
+router.get('/:id', (req, res) => {
+  const user = req.params.id;
+
+  User.findById(user, (err, obj) => {
+    if (err) return console.log(err);
+    return res.status(200).send({name: obj.name, surname: obj.surname, username:obj.username, created: obj.created, email: obj.email, tel: obj.tel});
+  })
 });
 
 module.exports = router;
