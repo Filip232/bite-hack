@@ -39,7 +39,6 @@ footer, header, hgroup, menu, nav, section {
 body {
 	line-height: 1;
 	font-family: 'Roboto', 'Tahoma', 'sans-serif';
-  overflow-y: hidden;
 }
 ol, ul {
 	list-style: none;
