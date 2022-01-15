@@ -25,6 +25,14 @@
         If you need something or want give a second life to a thing, you are in the right place
       </p>
     </div>
+    <div>
+      <router-link to="/login">
+        Log in
+      </router-link>
+      <router-link to="/register">
+        Register
+      </router-link>
+    </div>
   </div>
 </template>
 

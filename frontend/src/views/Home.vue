@@ -6,18 +6,7 @@
 
 <script>
 import {
-  // An object of all themes
-  // themes,
-
-//   // Direct theme values
-  // white,
-//   g10,
-//   g90,
   g100,
-
-//   // Specific token values
-//   interactive01,
-//   interactive02,
 } from '@carbon/themes';
 
 console.log(g100);
