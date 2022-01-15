@@ -3,16 +3,14 @@ const router = express.Router();
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
 
-router.get('/', (req, res) => {
-  res.send('dziala');
-})
-
 router.post('/register', (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
   const email = req.body.email;
+  const name = req.body.name;
+  const surname = req.body.surname;
 
-  console.log(res.body);
+  console.log(req.body);
 
   User.findOne({$or:[{email},{username}]}, (err, obj) => {
       if (err) return console.log(err);
@@ -27,12 +25,12 @@ router.post('/register', (req, res) => {
       bcrypt.hash(password, 12, (err, password) => {
           if (err) return console.log(err);
 
-          const user = new User({username, password, email});
+          const user = new User({username, password, email, name, surname});
           user.save();
-          return res.status(201).send('Uzytkownik zarejestrowany!');                    
+          return res.status(201).send({msg: 'User created!'});                    
       });
   });
-})
+});
 
 router.post('/login', (req, res) => {
   const username = req.body.username;
