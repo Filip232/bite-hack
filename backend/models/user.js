@@ -18,5 +18,4 @@ userSchema
     return this.products;
   });
 
-
 module.exports = mongoose.model('User', userSchema); 
