@@ -133,10 +133,9 @@ export default {
 @use 'sass:map';
 
 @import '@carbon/themes/scss/themes';
-@import '@/assets/_variables';
 
 .input {
-  padding: map.get($spacings, 4) 0 0;
+  padding: $spacing-04 0 0;
 }
 
 .wrapper {
