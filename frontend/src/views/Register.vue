@@ -1,11 +1,16 @@
 <template>
-  <div>
-    <RegisterAccount />
-  </div>
+    <div>
+    </div>
 </template>
-
 <script>
+import axios from 'axios';
+
 export default {
-  name: 'RegisterView'
+    name: 'Register',
+
+    async mounted() {
+        const { data } = await axios.get('users');
+        console.log(data);
+    }
 }
 </script>
