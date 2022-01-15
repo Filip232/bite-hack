@@ -76,7 +76,6 @@ export default {
       this.checkNameValidation();
       this.checkSurnameValidation();
       this.checkPasswordValidation();
-      console.log(this.formErrors.invalidEmail, this.formErrors.invalidUsername, this.formErrors.invalidName, this.formErrors.invalidSurname, this.formErrors.invalidPassword)
       if(!this.formErrors.invalidEmail && !this.formErrors.invalidUsername && !this.formErrors.invalidName && !this.formErrors.invalidSurname && !this.formErrors.invalidPassword) {
         console.log('should registerrrrrrr')
         this.register();
