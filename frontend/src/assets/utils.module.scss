@@ -1,7 +1,11 @@
-.d-f {
-  display: flex;
+@use 'sass:map';
+
+@import '@/assets/_variables';
+
+.mb-5 {
+  margin-bottom: map.get($spacings, 5);
 }
 
-.jc-fe{
-  justify-content: flex-end;
+.mb-6 {
+  margin-bottom: map.get($spacings, 6);
 }

@@ -1,23 +1,26 @@
 <template>
-  <div :class="$style.header">
-    <div :class="$style.header__buttons">
+  <div :class="$style.footer">
+    <div>
+      <p>LOGO</p>
+      <a>
+        Privacy Policy
+      </a>
+    </div>
+    <div>
+      <a>
+        Our vision
+      </a>
+      <a>
+        Team
+      </a>
+    </div>
+    <div :class="$style.footer__buttons">
       <CvButton>
         Log in
       </CvButton>
       <CvButton>
         Register
       </CvButton>
-    </div>
-    <div :class="$style.header__info">
-      <h1 :class="$styleUtils['mb-6']">
-        NAZWA TO JEST OSTATNIE
-      </h1>
-      <h2 :class="$styleUtils['mb-5']">
-        The place to reuse things
-      </h2>
-      <p :class="$styleUtils['mb-5']">
-        If you need something or want give a second life to a thing, you are in the right place
-      </p>
     </div>
   </div>
 </template>

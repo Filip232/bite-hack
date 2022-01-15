@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header :class="$style.header" />
+    <Header />
   </div>
 </template>
 
@@ -13,10 +13,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" module>
-.header {
-  display: flex;
-  justify-content: flex-end;
-}
-</style>
