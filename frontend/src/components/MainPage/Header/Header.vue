@@ -1,33 +1,20 @@
 <template>
   <div>
-    <cv-button>
-      Test
-    </cv-button>
-    <CvCheckbox>
-      1
-    </CvCheckbox>
+    <CvButton>
+      Log in
+    </CvButton>
+    <CvButton>
+      Register
+    </CvButton>
   </div>
 </template>
 
 <script>
-import { CvButton, CvCheckbox } from '@carbon/vue/src';
+import { CvButton } from '@carbon/vue/src';
 export default {
-  name: '',
+  name: 'Header',
   components: {
-    CvButton,
-    CvCheckbox
-  },
-  data: function () {
-    return {
-      result: 0,
-      storedA: 0,
-      storedB: 0,
-      lastStoredA: false,
-      lastStoredB: false,
-      message: ''
-    }
-  },
-  methods: {
+    CvButton
   }
 }
 </script>
