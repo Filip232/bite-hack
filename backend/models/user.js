@@ -12,7 +12,7 @@ const userSchema = new Schema({
   sessionToken: {type: String},
   tel: {type: String, minlength: 6, maxlength: 20},
   imagePath: {type: String, default: 'http://localhost:3000/img/defaultAvatar.png'},
-  avgRating: {type: Number, default: 0}
+  avgRating: {type: Number, default: -1}
 });
 
 module.exports = mongoose.model('User', userSchema); 

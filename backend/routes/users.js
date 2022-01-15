@@ -9,7 +9,7 @@ function updateAvgScore(userId) {
     .distinct('rating', (err, array) => {
       if (err) return console.log(err);
       const sum = array.reduce((a, b) => a + b, 0);
-      avg = (sum / array.length) || 0;
+      avg = (sum / array.length) || -1;
       User.findById(userId, (err, obj) => {
         if (err) return console.log(err);
         obj.avgRating = avg;
