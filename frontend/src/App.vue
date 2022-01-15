@@ -82,6 +82,10 @@ a {
   text-decoration: none;
 }
 
+h1 {
+  font-size: map.get($heading-07, font-size);
+}
+
 h2 {
   font-size: map.get($heading-06, font-size);
 }

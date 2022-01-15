@@ -92,6 +92,10 @@
   padding: $spacing-02;
 }
 
+.p-4 {
+  padding: $spacing-04;
+}
+
 .notification {
   position: absolute;
   top: 5%;
@@ -106,3 +110,11 @@
   }
 }
 
+.bold {
+  font-weight: 700;
+}
+
+.loading-small {
+  height: 20px;
+  width: 20px;
+}
