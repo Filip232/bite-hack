@@ -1,20 +1,20 @@
 <template>
   <div>
-    <CvButton>
+    <router-link to="/login">
       Log in
-    </CvButton>
-    <CvButton>
+    </router-link>
+    <router-link to="/register">
       Register
-    </CvButton>
+    </router-link>
   </div>
 </template>
 
 <script>
-import { CvButton } from '@carbon/vue/src';
+// import { CvButton } from '@carbon/vue/src';
 export default {
   name: 'Header',
   components: {
-    CvButton
+    // CvButton
   }
 }
 </script>
