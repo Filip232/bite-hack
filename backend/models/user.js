@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
-const mongoDB = 'mongodb+srv://hackathon-admin:fY7eAs42rcHkB2@cluster0.cen12.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
 const Schema = mongoose.Schema;
 
-const user = new Schema({
-  username: {type: String, required: true},
-  password: {type: String, required: true},
-  created: Date.now(),
+const userSchema = new Schema({
+  username: {type: String, required: true, minLength: 3, maxLength: 100},
+  password: {type: String, required: true, minLength: 8, maxLength: 150},
+  created: {type: Date, default: Date.now()},
   email: {type: String},
-  sessionToken: {type: String}
+  sessionToken: {type: String},
+  products: [Schema.Types.ObjectId]
 });
 
-const User = mongoose.model('User', user);
+module.exports = mongoose.model('User', userSchema); 
