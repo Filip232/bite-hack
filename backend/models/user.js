@@ -8,7 +8,8 @@ const userSchema = new Schema({
   password: {type: String, required: true, minLength: 8, maxLength: 150},
   created: {type: Date, default: Date.now()},
   email: {type: String, required: true, unique: true},
-  sessionToken: {type: String}
+  sessionToken: {type: String},
+  tel: {type: String, minlength: 6, maxlength: 20}
 });
 
 userSchema
