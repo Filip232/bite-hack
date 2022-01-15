@@ -22,26 +22,39 @@
             </div>
         </div>
         <div class="comments pt-80">
-            <h2>Comments</h2>
-    <button @click="showModal">Show</button>
-    <CvModal
-      buttonTriggerText="Launch modal"
-      modalHeading="Modal heading"
-      modalLabel="Label"
-      :visible="addCommentVisible"
-      @modal-hidden="addCommentVisible = false"
-    >
-        <template #content>
-            Siema
-        </template>
-    </CvModal>
+            <div class="comments-title-wrapper">
+                <h2>Comments</h2>
+                <CvButton @click="showModal">Add review!</CvButton>
+            </div>
         </div>
+        <CvModal
+        :visible="addCommentVisible"
+        @modal-hidden="addCommentVisible = false"
+        >
+            <template #title>
+                Add review
+            </template>
+            <template #content>
+                <CvForm>
+                    <span>Rate user!</span>
+                    <div>
+                        <FaceDizzy32 class="rating-icon" />
+                        <FaceDissatisfied32 class="rating-icon" />
+                        <FaceNeutral32 class="rating-icon" />
+                        <FaceActivated32 class="rating-icon" />
+                        <FaceCool32 class="rating-icon" />
+                    </div>
+                    <CvTextArea label="Comment content" placeholder="comment" />
+                </CvForm>
+            </template>
+        </CvModal>
     </div>
 </template>
 <script>
 import axios from 'axios';
 import dayjs from 'dayjs';
-import { CvLoading, CvButton, CvModal } from '@carbon/vue/src';
+import { CvLoading, CvButton, CvModal, CvForm, CvTextArea } from '@carbon/vue/src';
+import { FaceActivated32, FaceCool32, FaceDizzy32, FaceDissatisfied32, FaceNeutral32 } from '@carbon/icons-vue';
 
 export default {
     name: 'UserProfile',
@@ -49,6 +62,13 @@ export default {
         CvLoading,
         CvButton,
         CvModal,
+        CvForm,
+        CvTextArea,
+        FaceActivated32,
+        FaceCool32,
+        FaceDizzy32,
+        FaceDissatisfied32,
+        FaceNeutral32,
     },
     data() {
         return {
@@ -148,6 +168,11 @@ h1 {
     width: 80%;
     margin: 0 auto;
     border-top: thin solid $text-04;
+}
+
+.comments-title-wrapper {
+    display: flex;
+    justify-content: space-between;
 }
 </style>
 
