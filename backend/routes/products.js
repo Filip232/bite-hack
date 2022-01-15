@@ -14,15 +14,17 @@ router.post('/add', (req, res) => {
   if (!ownerId || !images || !description || !productName || !location || !token) return res.status(400).send({msg: 'Missing data. Check input.'});
 
   User.findOne({_id: ownerId}, (err, obj) => {
-    if (err) console.log(err);
+    if (err) return console.log(err);
 
-    if (token !== obj.sessionToken) return res.status(401).send({msg: 'Wrong token.'}); 
+    bcrypt.compare(token, obj.sessionToken, (err, result) => {
+      if (err) return console.log(err);
+
+      if (!result) res.status(401).send({msg: 'Wrong session token.'});
+    }); 
   });
 
-
-
   const product = new Product({ownerId, images, description, productName, location});
-  product.save(function(err, product) {
+  product.save( (err, product) => {
     if (err) return res.status(401).send({msg: "Couldn't save product. Check input data."});
     res.status(201).send({msg: 'Product added!', productId: product._id});
   })
