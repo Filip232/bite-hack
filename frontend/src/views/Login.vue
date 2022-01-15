@@ -68,7 +68,7 @@ export default {
             if (this.form.login === '' || this.form.password === '') return;
             this.serverError = null;
             const { data } = await axios.post('users/login', {
-                username: this.form.email,
+                email: this.form.email,
                 password: this.form.password
             }).catch(err => this.serverError = err.response.data.msg);
             if (this.serverError) return;

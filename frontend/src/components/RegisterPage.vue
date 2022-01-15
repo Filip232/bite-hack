@@ -152,7 +152,6 @@ export default {
 .register-box {
   margin-top: $spacing-08;
   width: 40%;
-  height: 40%;
   // background-color: $secondary;
 }
 
