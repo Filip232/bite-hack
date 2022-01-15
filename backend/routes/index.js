@@ -3,7 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res) {
-  res.send('dupacipa');
+  res.send('test');
 });
 
 module.exports = router;

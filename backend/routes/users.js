@@ -3,15 +3,22 @@ const router = express.Router();
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
 
+router.get('/', (req, res) => {
+  res.send('dziala');
+})
+
 router.post('/register', (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
+  const email = req.body.email;
 
-  User.findOne({ username }, (err, obj) => {
+  console.log(res.body);
+
+  User.findOne({$or:[{email},{username}]}, (err, obj) => {
       if (err) return console.log(err);
-  
+
       if (obj) {
-          return res.status(400).send({errors: ['Nazwa już zajęta.']});
+          return res.status(400).send({errors: ['Użytkownik już istnieje.']});
       }
 
       if (password.length < 8 || !/\d/.test(password)) {
@@ -20,10 +27,10 @@ router.post('/register', (req, res) => {
       bcrypt.hash(password, 12, (err, password) => {
           if (err) return console.log(err);
 
-          const user = new User({username, password});
+          const user = new User({username, password, email});
           user.save();
-          return res.status(201).send({id: user._id});                    
-      })
+          return res.status(201).send('Uzytkownik zarejestrowany!');                    
+      });
   });
 })
 
@@ -49,11 +56,11 @@ router.post('/login', (req, res) => {
 
           bcrypt.hash(token, 12, (err, hash) => {
               if (err) return console.log(err);
-              obj.token = hash;
+              obj.sessionToken = hash;
               
               obj.save();
 
-              return res.status(200).send({id: obj._id, token, username: obj.username});
+              return res.status(200).send({id: obj._id, token: obj.sessionToken, username: obj.username, email: obj.email});
           });
       });
   });
