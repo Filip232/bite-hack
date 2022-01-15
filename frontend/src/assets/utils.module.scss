@@ -84,6 +84,7 @@
   right: 5%;
   transition: 0.3s;
   opacity: 0;
+  z-index: 20;
 
   &--opened {
     opacity: 1;

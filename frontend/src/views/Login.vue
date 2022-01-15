@@ -74,7 +74,7 @@ export default {
                 email: this.form.email,
                 password: this.form.password
             }).catch(err => {
-                this.serverError = err.response.data.msg[0];
+                this.serverError = err.response.data.msg;
                 this.isLoading = false;
             });
             if (this.serverError) return;
