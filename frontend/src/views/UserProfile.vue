@@ -1,25 +1,40 @@
 <template>
-    <div>
+    <div class="pt-80">
+        <div class="wrapper">
             <CvLoading :active="isLoading" :overlay="true" />
+            <h1>User profile</h1>
             <div class="profile-wrapper">
-                <img :src="userDetails.imagePath" class="profile-img" alt="Profile image"/>
-                <span><span :class="$styleUtils['bold']">Name:</span> {{ userDetails.name }}</span>
-                <span><span :class="$styleUtils['bold']">Surname:</span> {{ userDetails.surname }}</span>
-                <span><span :class="$styleUtils['bold']">Email:</span> {{ userDetails.email }}</span>
-                <span><span :class="$styleUtils['bold']">Telephone:</span> {{ userDetails.tel }}</span>
-                <span><span :class="$styleUtils['bold']">Profile was created:</span> {{ userDetails.created }}</span>
+                <div class="img-wrapper">
+                    <img :src="userDetails.imagePath" class="profile-img" alt="Profile image"/>
+                    <span class="img-update">Update image</span>
+                </div>
+                <div class="info-wrapper">
+                    <span><span :class="$styleUtils['bold']">Name:</span> {{ userDetails.name }}</span>
+                    <span><span :class="$styleUtils['bold']">Surname:</span> {{ userDetails.surname }}</span>
+                    <span><span :class="$styleUtils['bold']">Email:</span> {{ userDetails.email }}</span>
+                    <span><span :class="$styleUtils['bold']">Telephone:</span> {{ userDetails.tel }}</span>
+                    <span><span :class="$styleUtils['bold']">Profile was created at:</span> {{ userDetails.created }}</span>
+                    <CvButton v-if="!isMy" :class="$styleUtils['mt-6']">
+                        <router-link :to="`/users/${this.$route.params.id}/edit`" class="edit-profile">Edit profile info</router-link>
+                    </CvButton>
+                </div>
             </div>
+        </div>
+        <div class="comments">
+
+        </div>
     </div>
 </template>
 <script>
 import axios from 'axios';
 import dayjs from 'dayjs';
-import { CvLoading } from '@carbon/vue/src';
+import { CvLoading, CvButton } from '@carbon/vue/src';
 
 export default {
     name: 'UserProfile',
     components: {
         CvLoading,
+        CvButton,
     },
     data() {
         return {
@@ -32,6 +47,7 @@ export default {
                 imagePath: null,
             },
             isLoading: false,
+            isMy: this.$store.state.user.id === this.$route.params.id,
         };
     },
     async created() {
@@ -50,14 +66,59 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '~@carbon/themes/scss/themes';
+
 .profile-img {
     height: 150px;
     width: 150px;
+    margin: 20px 0;
 }
 
+.wrapper {
+    width: 80%;
+    padding: 50px 0;
+    margin: 0 auto;
+}
 .profile-wrapper {
     display: flex;
+    justify-content: space-around;
+    flex-flow: row-reverse;
+    align-items: center;
+    padding-top: 50px;
+}
 
+h1 {
+    text-align: center;
+}
+
+.pt-80 {
+    padding-top: 80px;
+}
+
+.info-wrapper {
+    display: flex;
+    flex-flow: column;
+    width: 50%;
+    align-items: flex-start;
+
+    & span {
+        padding: 5px 0;
+    }
+}
+
+.img-wrapper {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
+.edit-profile {
+    color: $text-04;
+}
+
+.img-update {
+    text-decoration: underline;
+    cursor: pointer;
 }
 </style>
 
