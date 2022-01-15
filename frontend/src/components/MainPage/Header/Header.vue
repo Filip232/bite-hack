@@ -1,14 +1,14 @@
 <template>
   <div :class="$style.header">
-    <router-link :class="[$styleUtils['d-f']]" to="/home">
+    <router-link :class="[$styleUtils['d-f']]" to="/">
       <img :class="[$style.logo, $styleUtils['as-c']]" src="@/assets/logo.png" alt="Logo" >
     </router-link>
     <div :class="$styleUtils['d-f']">
-      <router-link :class="[$styleUtils['mr-5vw'], $styleUtils['as-c']]" to="/home" v-text="'Test'" />
-      <router-link :class="[$styleUtils['mr-5vw'], $styleUtils['as-c']]" to="/home" v-text="'Test'" />
-      <router-link :class="[$styleUtils['mr-5vw'], $styleUtils['as-c']]"  to="/home" v-text="'Test'" />
-      <router-link :class="[$styleUtils['mr-5vw'], $styleUtils['as-c']]"  to="/home" v-text="'Test'" />
-      <router-link :class="[$styleUtils['as-c']]"  to="/home" v-text="'Test'" />
+      <router-link :class="[$styleUtils['mr-5vw'], $styleUtils['as-c']]" to="/" v-text="'Test'" />
+      <router-link :class="[$styleUtils['mr-5vw'], $styleUtils['as-c']]" to="/" v-text="'Test'" />
+      <router-link :class="[$styleUtils['mr-5vw'], $styleUtils['as-c']]"  to="/" v-text="'Test'" />
+      <router-link :class="[$styleUtils['mr-5vw'], $styleUtils['as-c']]"  to="/" v-text="'Test'" />
+      <router-link :class="[$styleUtils['as-c']]"  to="/" v-text="'Test'" />
     </div>
     <div :class="$style.header__buttons">
       <router-link :class="[$style['header__buttons--link'], $styleUtils['mr-5']]" to="/login">
@@ -61,6 +61,10 @@ export default {
       align-self: center;
       display: flex;
       flex-direction: row;
+      color: $carbon--white-0;
+      background-color: $carbon--gray-60;
+      padding: $spacing-03 $spacing-04;
+      border-radius: 1rem;
     }
 
     &--text {
