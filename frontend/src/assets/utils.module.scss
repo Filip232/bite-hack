@@ -33,8 +33,22 @@
   margin-top: $spacing-06;
 }
 
-.pt-10 {
-  padding-top: $spacing-10;
+.pt-12 {
+  padding-top: $spacing-12;
+}
+
+
+.mr-5 {
+  margin-right: $spacing-05;
+}
+
+.mr-5vw {
+  margin-right: 5vw;
+}
+
+
+.mr-9 {
+  margin-right: $spacing-09;
 }
 
 .mx-4 {
@@ -64,6 +78,10 @@
 
 .ai-c {
   align-items: center;
+}
+
+.as-c {
+  align-self: center;
 }
 
 .w-100p {

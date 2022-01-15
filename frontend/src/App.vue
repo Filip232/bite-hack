@@ -1,8 +1,23 @@
 <template>
   <div id="app">
+		<Header />
     <router-view/>
+		<Footer />
   </div>
 </template>
+
+<script>
+
+import Header from '@/components/MainPage/Header/Header.vue'
+import Footer from '@/components/Footer/Footer.vue'
+export default {
+  name: 'App',
+  components: {
+    Header,
+		Footer
+  }
+}
+</script>
 
 <style lang="scss">
 @use 'sass:map';

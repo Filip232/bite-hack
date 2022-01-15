@@ -97,7 +97,7 @@ export default {
 }
 
 .wrapper {
-    margin-top: 8vh;
+    padding-top: 13vh;
     text-align: center;
 }
 
