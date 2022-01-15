@@ -1,5 +1,8 @@
 <template>
   <div>
+    <Button>
+      Click me
+    </Button>
   </div>
 </template>
 
@@ -8,6 +11,9 @@
 import { Button } from 'element-ui';
 export default {
   name: 'MainPage',
+  components: {
+    Button
+  },
   data: function () {
     return {
       result: 0,

@@ -4,7 +4,7 @@ import router from './router'
 import store from './store'
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://192.168.43.130:3000/';
+axios.defaults.baseURL = 'http://192.168.1.118:3000/';
 axios.defaults.headers.post['crossDomain'] = 'true';
 
 Vue.config.productionTip = false
