@@ -1,18 +1,21 @@
 <template>
   <div>
-    <Button>
-      Click me
-    </Button>
+    <cv-button>
+      Test
+    </cv-button>
+    <CvCheckbox>
+      1
+    </CvCheckbox>
   </div>
 </template>
 
 <script>
-
-import { Button } from 'element-ui';
+import { CvButton, CvCheckbox } from '@carbon/vue/src';
 export default {
   name: 'MainPage',
   components: {
-    Button
+    CvButton,
+    CvCheckbox
   },
   data: function () {
     return {
@@ -25,68 +28,7 @@ export default {
     }
   },
   methods: {
-        add: function () {
-          if(this.lastStoredA && this.lastStoredB) {
-            this.result = this.storedA + this.storedB;
-            this.storedA = this.storedB = 0;
-            this.lastStoredA = this.lastStoredB = 0;
-          } else {
-            this.message = 'choose all numbers'
-          }
-        },
-        subtract: function () {
-          if(this.lastStoredA && this.lastStoredB) {
-            this.result = this.storedA - this.storedB;
-            this.storedA = this.storedB = 0;
-            this.lastStoredA = this.lastStoredB = 0;
-          } else {
-            this.message = 'choose all numbers'
-          }
-        },
-        multi: function () {
-          if(this.lastStoredA && this.lastStoredB) {
-            this.result = this.storedA * this.storedB;
-            this.storedA = this.storedB = 0;
-            this.lastStoredA = this.lastStoredB = 0;
-          }
-          this.message = 'choose all numbers'
-        },
-        divi: function () {
-          if(this.lastStoredA && this.lastStoredB) {
-            if(!this.storedB) {
-              this.message = 'Cant divide by 0, clear your last letter'
-              return
-            }
-            this.result = this.storedA / this.storedB;
-            this.storedA = this.storedB = 0;
-            this.lastStoredA = this.lastStoredB = 0;
-          } else {
-            this.message = 'choose all numbers'
-          }
-        },
-        storeVal: function (val) {
-          this.message = ''
-          if(!this.lastStoredA) {
-            this.storedA = val;
-            this.lastStoredA = true;
-           } else {
-            this.storedB = val;
-            this.lastStoredB = true;
-          }
-        },
-        clear: function () {
-          if(this.lastStoredB) {
-            this.storedB = 0;
-            this.lastStoredB = false;
-            return
-          }
-          if(this.lastStoredA) {
-            this.storedA = 0;
-            this.lastStoredA = false;
-            return
-          }
-        }
-      }
+  }
 }
 </script>
 
