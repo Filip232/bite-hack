@@ -20,11 +20,3 @@ export default {
 
 }
 </script>
-
-<style lang="scss" scoped>
-@import '@carbon/themes/scss/themes';
-
-.andziej {
-  color: $active-01;
-}
-</style>
