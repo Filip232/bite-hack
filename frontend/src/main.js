@@ -6,6 +6,10 @@ import axios from 'axios';
 
 axios.defaults.baseURL = 'http://192.168.1.118:3000/';
 axios.defaults.headers.post['crossDomain'] = 'true';
+import "carbon-components/css/carbon-components.min.css";
+import CarbonComponentsVue from "@carbon/vue";
+
+Vue.use(CarbonComponentsVue);
 
 Vue.config.productionTip = false
 
