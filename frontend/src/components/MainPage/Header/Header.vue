@@ -2,13 +2,19 @@
   <div :class="$style.header">
     <div :class="$style.header__buttons">
       <CvButton>
-        Log in
+        <p :class="$style['header__buttons--text']">
+          Log in
+        </p>
+        <Login16 />
       </CvButton>
       <CvButton>
-        Register
+        <p :class="$style['header__buttons--text']">
+          Register
+        </p>
+        <FaceActivatedAdd16 />
       </CvButton>
     </div>
-    <div :class="$style.header__info">
+    <div :class="[$style['header__info'], $styleUtils['c-primary']]">
       <h1 :class="$styleUtils['mb-6']">
         NAZWA TO JEST OSTATNIE
       </h1>
@@ -23,11 +29,14 @@
 </template>
 
 <script>
+import { Login16, FaceActivatedAdd16 } from '@carbon/icons-vue';
 import { CvButton } from '@carbon/vue/src';
 export default {
   name: 'Header',
   components: {
-    CvButton
+    CvButton,
+    Login16,
+    FaceActivatedAdd16
   }
 }
 </script>
@@ -35,15 +44,17 @@ export default {
 <style src="@/assets/utils.module.scss" lang="scss" module="$styleUtils"></style>
 
 <style lang="scss" module>
-@use 'sass:map';
-
-@import '@/assets/_variables';
+@import '@carbon/themes/scss/themes';
 
 .header {
   &__buttons {
     display: flex;
     justify-content: flex-end;
-    margin-bottom: map.get($spacings, 7);
+    margin-bottom: $spacing-10;
+    &--text {
+      padding-right: $spacing-03;
+      background-color: transparent;
+    }
   }
 
   &__info {

@@ -1,11 +1,18 @@
-@use 'sass:map';
+@import '@carbon/themes/scss/themes';
+@import '@carbon/colors/scss/colors';
 
-@import '@/assets/_variables';
+.c-primary {
+  color: $carbon--white-0;
+}
+
+.bc-transparent {
+  background-color: transparent;
+}
 
 .mb-5 {
-  margin-bottom: map.get($spacings, 5);
+  margin-bottom: $spacing-05;
 }
 
 .mb-6 {
-  margin-bottom: map.get($spacings, 6);
+  margin-bottom: $spacing-06;
 }
