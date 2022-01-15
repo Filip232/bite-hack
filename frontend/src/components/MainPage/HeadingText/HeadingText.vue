@@ -1,5 +1,5 @@
 <template>
-  <div :class="[$style['info'], $styleUtils['c-primary'], $styleUtils['pt-10']]">
+  <div :class="[$style['info'], $styleUtils['c-primary'], $styleUtils['pt-13']]">
     <h1 :class="[$styleUtils['mb-6'], $style['info--logo']]">
       NAZWA TO JEST OSTATNIE
     </h1>
