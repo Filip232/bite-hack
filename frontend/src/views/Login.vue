@@ -70,7 +70,7 @@ export default {
             const { data } = await axios.post('users/login', {
                 username: this.form.email,
                 password: this.form.password
-            }).catch(err => this.serverError = err.response.data.msg[0]);
+            }).catch(err => this.serverError = err.response.data.msg);
             if (this.serverError) return;
 
             this.$store.commit('saveUserData', data);

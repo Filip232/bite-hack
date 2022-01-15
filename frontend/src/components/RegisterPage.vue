@@ -77,7 +77,6 @@ export default {
       this.checkSurnameValidation();
       this.checkPasswordValidation();
       if(!this.formErrors.invalidEmail && !this.formErrors.invalidUsername && !this.formErrors.invalidName && !this.formErrors.invalidSurname && !this.formErrors.invalidPassword) {
-        console.log('should registerrrrrrr')
         this.register();
       }
     },
