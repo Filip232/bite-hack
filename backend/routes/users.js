@@ -4,6 +4,20 @@ const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const Review = require('../models/review');
 
+function updateAvgScore(userId) {
+  Review.find({reviewedId: userId})
+    .distinct('rating', (err, array) => {
+      if (err) return console.log(err);
+      const sum = array.reduce((a, b) => a + b, 0);
+      avg = (sum / array.length) || -1;
+      User.findById(userId, (err, obj) => {
+        if (err) return console.log(err);
+        obj.avgRating = avg;
+        obj.save();
+      })
+    })
+}
+
 router.post('/register', (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
@@ -91,11 +105,12 @@ router.post('/postReview', (req, res) => {
         if (err) return console.log(err);
     
         if (obj) return res.status(401).send({msg: 'Comment from this user alreayd exists.'});
-        
+
         const review = new Review({posterId, reviewedId, rating, comment});
         review.save( (err) => {
           if (err) return console.log(err);
-        return res.status(201).send({msg: 'Review added!'});
+          updateAvgScore(reviewedId);
+          return res.status(201).send({msg: 'Review added!'});
         });
       });
     }); 
@@ -122,8 +137,11 @@ router.post('/updateReview', (req, res) => {
         obj.rating = rating;
         obj.comment = comment;
     
-        obj.save();
-        res.status(201).send({msg: 'Review updated!'});
+        obj.save((err) => {
+          if (err) return console.log(err);
+          updateAvgScore(reviewedId);
+          res.status(201).send({msg: 'Review updated!'});
+        });
       });
     });
   });
@@ -142,6 +160,7 @@ router.delete('/deleteReview', (req, res) => {
       
       Review.deleteOne({posterId, reviewedId}, (err) => {
         if (err) return console.log(err);
+        updateAvgScore(reviewedId);
         return res.status(200).send({msg: 'Review deleted.'});
       });
     });
@@ -153,7 +172,7 @@ router.get('/:id', (req, res) => {
 
   User.findById(user, (err, obj) => {
     if (err) return console.log(err);
-    return res.status(200).send({name: obj.name, surname: obj.surname, username:obj.username, created: obj.created, email: obj.email, tel: obj.tel, imagePath: obj.imagePath, avgRating: obj.getAverageRating});
+    return res.status(200).send({name: obj.name, surname: obj.surname, username:obj.username, created: obj.created, email: obj.email, tel: obj.tel, imagePath: obj.imagePath, avgRating: obj.avgRating});
   })
 });
 
