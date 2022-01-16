@@ -8,9 +8,11 @@
     <CvButton disabled :class="[$styleUtils['w-100p'], $style.disabled]">
       My products
     </CvButton>
-    <CvButton disabled :class="[$styleUtils['w-100p'], $style.disabled]">
-      Add product
-    </CvButton>
+    <router-link :class="$styleUtils['c-primary']" :to="`/products/add`">
+      <CvButton :class="$styleUtils['w-100p']">
+        Add product
+      </CvButton>
+    </router-link>
     <CvButton @click="logout" :class="$styleUtils['w-100p']">
       <p v-text="'Logout'" />
       <Logout16 />
