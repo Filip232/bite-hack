@@ -29,7 +29,6 @@ export default {
     },
     async created() {
         const { data } = await axios.get(`users/myAllProducts/${this.$store.state.user.id}`);
-        console.log(data);
         this.products = data.myProducts;
     }
 
