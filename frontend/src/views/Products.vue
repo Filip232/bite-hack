@@ -1,7 +1,7 @@
 <template>
   <div :class="[$style['wrapper'], $styleUtils['pt-13']]">
     <div :class="$style['product-list']">
-      <div v-for="product in productList" :key="product._id" :class="$style['product']">
+      <router-link v-for="product in productList" :key="product._id" :class="$style['product']" :to="`/products/${product._id}`">
         <div :class="[$styleUtils['w-50p'], $style['product__img-box']]">
           <img :class="$style['product__img']" src="@/assets/szafa.png" alt="szafa">
         </div>
@@ -12,10 +12,10 @@
           </div>
           <div :class="$style['description-2-box']">
             <p  :class="$style['description-2']">{{ product.location }}</p>
-            <p :class="$style['description-2']">User Name</p>
+            <p :class="$style['description-2']">{{ product.username }}</p>
           </div>
         </div>
-      </div>
+      </router-link>
     </div>
     <CvButton v-for="page in maxPage" :key="page">
       <router-link :to="`/products/${page}`">{{ page }}</router-link>
@@ -63,16 +63,14 @@ export default {
 }
 
 .product-list {
-  display: grid;
-  grid-template-columns: repeat(3, 25%);
-  column-gap: $spacing-08;
-  row-gap: $spacing-08;
-  justify-content: space-evenly;
+  display: flex;
+  flex-direction: column;
 }
 
 .product {
   display: flex;
   background-color: $carbon--gray-90;
+  margin-bottom: $spacing-07;
 
   &__img {
     width: 100%;
