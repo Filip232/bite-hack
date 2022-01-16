@@ -230,10 +230,7 @@ router.post('/updateUser', (req, res) => {
   const userId = req.body.id;
   const token = req.body.token;
 
-  console.log(userId);
-
   User.findById(userId, (err, obj) => {
-    console.log(obj);
     if (err) return console.log(err);
     bcrypt.compare(token, obj.sessionToken, (err, result) => {
       if (err) return console.log(err);
