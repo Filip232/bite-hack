@@ -37,8 +37,8 @@
         <div class="comments pt-80">
             <div class="comments-title-wrapper">
                 <h2>Comments</h2>
-                <CvButton v-if="!userDetails.review.id" @click="showModal">Add review!</CvButton>
-                <CvButton v-if="userDetails.review.id" @click="showModalEdit">Edit your review!</CvButton>
+                <CvButton v-if="!userDetails.review.id && !isMy" @click="showModal">Add review!</CvButton>
+                <CvButton v-else-if="userDetails.review.id" @click="showModalEdit">Edit your review!</CvButton>
             </div>
             <div v-if="userDetails.review.id" class="your-comment-section">
                 <h4>Your Comment</h4>
@@ -54,8 +54,25 @@
                     {{ userDetails.review.comment }}
                 </p>
             </div>
+            <div v-else-if="!userDetails.review.id && !isMy">
+                You did not comment on that user yet!
+            </div>
             <div class="other-comments-section">
                 <h4>Other Comments</h4>
+                <template v-if="allReviews.reviews.length">
+                    <template v-for="review in allReviews.reviews">
+                        <SingleComment
+                            :rating="review.rating"
+                            :username="review.username"
+                            :comment="review.comment"
+                            :userId="review.posterId"
+                            :key="review.id"
+                        />
+                    </template>
+                </template>
+                <div v-else>
+                    No comments
+                </div>
             </div>
         </div>
         <CvModal
@@ -128,6 +145,7 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import { CvLoading, CvButton, CvModal, CvTextArea } from '@carbon/vue/src';
 import { FaceActivated32, FaceCool32, FaceDizzy32, FaceDissatisfied32, FaceNeutral32 } from '@carbon/icons-vue';
+import SingleComment from '@/components/SingleComment.vue';
 
 export default {
     name: 'UserProfile',
@@ -141,6 +159,7 @@ export default {
         FaceDizzy32,
         FaceDissatisfied32,
         FaceNeutral32,
+        SingleComment,
     },
     data() {
         return {
@@ -175,18 +194,20 @@ export default {
             serverError: null,
             commentPage: 0,
             commentLimit: 50,
-
+            allReviews: {
+                reviews: [],
+            },
         };
+    },
+    watch: {
+        async $route() {
+            this.getUserData();
+            this.getReviews();
+        }
     },
     async created() {
         this.getUserData();
-        const reviews = await axios.get(`users/reviews/${this.commentPage}`, {
-            params: {
-                limit: this.commentLimit,
-                userId: this.$route.params.id,
-            },
-        });
-        console.log(reviews.data);
+        this.getReviews();
     },
     methods: {
         showModal() {
@@ -201,6 +222,15 @@ export default {
         },
         modalHiddenEdit() {
             this.editCommentVisible = false;
+        },
+        async getReviews() {
+            const reviews = await axios.get(`users/reviews/${this.commentPage}`, {
+                params: {
+                    limit: this.commentLimit,
+                    userId: this.$route.params.id,
+                },
+            });
+            this.allReviews = reviews.data;
         },
         ratingValidation() {
             if(this.form.rating === null) this.ratingInvalid = 'Rating is required';
