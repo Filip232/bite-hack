@@ -16,10 +16,10 @@
         <CvLoading :active="isLoading" :overlay="true" />
         <h1>Add Product</h1>
         <CvForm @submit.prevent="addProduct">
-            <CvTextInput label="Product name" v-model="form.name" />
-            <CvTextArea label="Description" v-model="form.description" />
-            <CvTextInput label="Location" v-model="form.location" />
-            <CvSelect label="Category" v-model="form.category">
+            <CvTextInput :class="$styleUtils['mt-4']" label="Product name" v-model="form.name" />
+            <CvTextArea :class="$styleUtils['mt-4']" label="Description" v-model="form.description" />
+            <CvTextInput :class="$styleUtils['mt-4']" label="Location" v-model="form.location" />
+            <CvSelect :class="$styleUtils['mt-4']" label="Category" v-model="form.category">
                 <template v-for="(category, index) in categories">
                     <CvSelectOption :key="index" :value="category" >{{ category }}</CvSelectOption>
                 </template>
