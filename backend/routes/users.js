@@ -154,7 +154,7 @@ router.post('/updateReview', (req, res) => {
 
 router.delete('/deleteReview', (req, res) => {
   const posterId = req.body.posterId;
-  const reviewedId = req.body.reviewerId;
+  const reviewedId = req.body.reviewedId;
   const token = req.body.token;
   User.findOne({ _id: posterId}, (err, obj) => {
     if (err) return console.log(err);
