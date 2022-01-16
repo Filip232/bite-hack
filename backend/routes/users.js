@@ -153,13 +153,11 @@ router.post('/updateReview', (req, res) => {
 });
 
 router.delete('/deleteReview', (req, res) => {
-  const posterId = req.query.posterId;
-  const reviewedId = req.query.reviewerId;
-  const token = req.query.token;
+  const posterId = req.body.posterId;
+  const reviewedId = req.body.reviewedId;
+  const token = req.body.token;
   User.findOne({ _id: posterId}, (err, obj) => {
     if (err) return console.log(err);
-
-    // console.log(obj);
 
     bcrypt.compare(token, obj.sessionToken, (err, result) => {
       if (err) return console.log(err);
