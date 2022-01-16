@@ -103,6 +103,10 @@ export default {
                 tel: null,
                 imagePath: null,
                 avgRating: null,
+                review: {
+                    rating: null,
+                    comment: null
+                }
             },
             isLoading: false,
             isMy: this.$store.state.user.id === this.$route.params.id,
@@ -151,13 +155,19 @@ export default {
             
             this.isLoadingAddComment = false;
             this.addCommentVisible = false;
+            this.form.rating = null;
+            this.form.comment = '';
             setTimeout(() => {
                 this.getUserData();
             }, 500)
         },
         async getUserData() {
             this.isLoading = true;
-            const userInfo = await axios.get(`users/${this.$route.params.id}`);
+            const userInfo = await axios.get(`users/${this.$route.params.id}`, {
+                params: {
+                    id: this.$store.state.user.id,
+                }
+            });
             this.userDetails.name = userInfo.data.name;
             this.userDetails.surname = userInfo.data.surname;
             this.userDetails.email = userInfo.data.email;
@@ -165,7 +175,11 @@ export default {
             this.userDetails.created = dayjs(userInfo.data.created).format('D MMMM YYYY');
             this.userDetails.imagePath = userInfo.data.imagePath;
             this.userDetails.avgRating = userInfo.data.avgRating;
-            console.log(this.userDetails.avgRating);
+            this.userDetails.review = {
+                rating: userInfo.data?.review?.rating || null,
+                comment: userInfo.data?.review?.comment || null,
+                id: userInfo.data?.review?.id || null,
+            }
             this.isLoading = false;
         }
     },
