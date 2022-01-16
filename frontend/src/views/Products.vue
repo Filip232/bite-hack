@@ -1,5 +1,6 @@
 <template>
   <div :class="[$style['wrapper'], $styleUtils['pt-13']]">
+    <CvLoading :active="isLoading" :overlay="true" />
     <div v-if="productList.length" :class="$style['product-list']">
       <router-link v-for="product in productList" :key="product._id" :class="[$style['product'], $styleUtils['c-primary']]" :to="`/products/${product._id}`">
         <div :class="[$style['product__img-box']]">
@@ -53,15 +54,19 @@ export default {
   },
   watch: {
     async $route() {
-      const { data } = await axios.get(`/products/productList/${this.currentPage}`);
+      this.isLoading = true;
+      const { data } = await axios.get(`/products/productList/${this.currentPage}`).catch(() => this.isLoading = false);
       this.productList = data.products;
+      this.isLoading = false;
     }
   },
   async created() {
-    const { data } = await axios.get('/products/productList/0');
+    this.isLoading = true;
+    const { data } = await axios.get('/products/productList/0').catch(() => this.isLoading = false);
     if (this.currentPage < 0) this.currentPage = '0';
     this.maxPage = data.maxPage;
     this.productList = data.products;
+    this.isLoading = false;
   },
   methods: {
     nextPage() {

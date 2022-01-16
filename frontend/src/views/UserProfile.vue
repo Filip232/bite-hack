@@ -391,6 +391,7 @@ h1 {
 
 .rating-icon {
     margin: 10px 5px;
+    cursor: pointer;
     &:hover {
         color: #e4cd05;
     }

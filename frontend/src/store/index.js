@@ -21,8 +21,12 @@ export default new Vuex.Store({
       state.user.id = id;
       state.user.imagePath = imagePath
     },
-    setToken(state, token) {
-      state.user.token = token;
+    logout(state) {
+      state.user.email = null;
+      state.user.username = null;
+      state.user.token = null;
+      state.user.id = null;
+      state.user.imagePath = null;
     }
   },
   actions: {

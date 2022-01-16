@@ -46,7 +46,7 @@ export default {
   methods: {
     async logout() {
       await axios.post('/users/logout', {token: this.$store.state.user.token, id: this.$store.state.user.id});
-      this.$store.commit('setToken', null);
+      this.$store.commit('logout', null);
       this.$router.push('/');
     }
   }

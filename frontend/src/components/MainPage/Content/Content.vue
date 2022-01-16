@@ -2,10 +2,10 @@
   <div :class="[$style.banner]">
     <div :class="$style['banner__row']">
       <Store32 :class="[$style['banner__row--icon']]" />
-      <router-link :class="$style['banner__row--button']" v-text="'Check out our market'" to="/login" />
+      <router-link :class="$style['banner__row--button']" v-text="'Check out our market'" to="/products/all/0" />
     </div>
     <div :class="$style['banner__row']">
-      <router-link :class="$style['banner__row--button']" v-text="'Create an offer'" to="/login" />
+      <router-link :class="$style['banner__row--button']" v-text="'Create an offer'" :to="$store.state.user.id ? '/products/add' : '/login'" />
       <DeliveryParcel32 :class="$style['banner__row--icon']" />
     </div>
   </div>
