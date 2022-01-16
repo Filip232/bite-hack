@@ -29,7 +29,7 @@
                     <span><span :class="$styleUtils['bold']">Profile was created at:</span> {{ userDetails.created }}</span>
                     <span><span :class="$styleUtils['bold']">Average rating: </span> {{ userDetails.avgRating === -1 ? 'This user has no ratings': userDetails.avgRating }}</span>
                     <CvButton v-if="isMy" :class="$styleUtils['mt-6']">
-                        <router-link :to="`/users/${this.$route.params.id}/edit`" class="edit-profile">Edit profile info</router-link>
+                        <router-link :to="`/users/edit`" class="edit-profile">Edit profile info</router-link>
                     </CvButton>
                 </div>
             </div>
