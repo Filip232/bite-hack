@@ -48,7 +48,6 @@ export default {
 
     &--button {
       padding: $spacing-04 $spacing-06;
-      border-radius: 1.5rem;
       background-color: $carbon--gray-70;
       color: $carbon--white-0;
     }

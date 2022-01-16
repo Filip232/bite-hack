@@ -81,7 +81,6 @@ export default {
                 this.isLoading = false;
             });
             if (this.serverError) return;
-
             this.$store.commit('saveUserData', data);
             this.isLoading = false;
             this.$router.push('/');
