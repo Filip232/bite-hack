@@ -159,8 +159,6 @@ router.delete('/deleteReview', (req, res) => {
   User.findOne({ _id: posterId}, (err, obj) => {
     if (err) return console.log(err);
 
-    // console.log(obj);
-
     bcrypt.compare(token, obj.sessionToken, (err, result) => {
       if (err) return console.log(err);
       if (!result) return res.status(401).send({msg: 'Wrong session token.'});

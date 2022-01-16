@@ -41,7 +41,10 @@
                 <CvButton v-else-if="userDetails.review.id" @click="showModalEdit">Edit your review!</CvButton>
             </div>
             <div v-if="userDetails.review.id" class="your-comment-section">
-                <h4>Your Comment</h4>
+                <h4 class="d-f-ac">
+                    Your Comment
+                    <TrashCan32 :class="$styleUtils['c-danger']" class="trashcan" @click="deleteReview" />
+                </h4>
                 <div class="comment-rating-section">
                     Rating: 
                     <FaceDizzy32 v-if="userDetails.review.rating === 1" class="rating-icon-comment" />
@@ -144,7 +147,7 @@
 import axios from 'axios';
 import dayjs from 'dayjs';
 import { CvLoading, CvButton, CvModal, CvTextArea } from '@carbon/vue/src';
-import { FaceActivated32, FaceCool32, FaceDizzy32, FaceDissatisfied32, FaceNeutral32 } from '@carbon/icons-vue';
+import { FaceActivated32, FaceCool32, FaceDizzy32, FaceDissatisfied32, FaceNeutral32, TrashCan32 } from '@carbon/icons-vue';
 import SingleComment from '@/components/SingleComment.vue';
 
 export default {
@@ -159,6 +162,7 @@ export default {
         FaceDizzy32,
         FaceDissatisfied32,
         FaceNeutral32,
+        TrashCan32,
         SingleComment,
     },
     data() {
@@ -302,6 +306,17 @@ export default {
             this.edit.comment = userInfo.data?.review?.comment || '';
 
             this.isLoading = false;
+        },
+        async deleteReview() {
+            this.isLoading = true;
+            await axios.delete('/users/deleteReview', {
+                posterId: this.$store.state.user.id,
+                reviewedId: this.$route.params.id,
+                token: this.$store.state.user.token,
+            }).catch(() => this.isLoading = false)
+
+            setTimeout(() => this.getUserData(), 500);
+            this.isLoading = false;
         }
     },
 }
@@ -406,6 +421,16 @@ h1 {
 
 .other-comments-section {
     padding: 30px 0 100px;
+}
+
+.trashcan{
+    margin-left: 15px;
+    cursor: pointer;
+}
+
+.d-f-ac {
+    display: flex;
+    align-items: center;
 }
 </style>
 
