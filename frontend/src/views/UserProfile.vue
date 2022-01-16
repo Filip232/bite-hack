@@ -28,7 +28,7 @@
                     <span><span :class="$styleUtils['bold']">Telephone:</span> {{ userDetails.tel }}</span>
                     <span><span :class="$styleUtils['bold']">Profile was created at:</span> {{ userDetails.created }}</span>
                     <span><span :class="$styleUtils['bold']">Average rating: </span> {{ userDetails.avgRating === -1 ? 'This user has no ratings': userDetails.avgRating }}</span>
-                    <CvButton v-if="!isMy" :class="$styleUtils['mt-6']">
+                    <CvButton v-if="isMy" :class="$styleUtils['mt-6']">
                         <router-link :to="`/users/${this.$route.params.id}/edit`" class="edit-profile">Edit profile info</router-link>
                     </CvButton>
                 </div>
@@ -37,7 +37,25 @@
         <div class="comments pt-80">
             <div class="comments-title-wrapper">
                 <h2>Comments</h2>
-                <CvButton @click="showModal">Add review!</CvButton>
+                <CvButton v-if="!userDetails.review.id" @click="showModal">Add review!</CvButton>
+                <CvButton v-if="userDetails.review.id" @click="showModalEdit">Edit your review!</CvButton>
+            </div>
+            <div v-if="userDetails.review.id" class="your-comment-section">
+                <h4>Your Comment</h4>
+                <div class="comment-rating-section">
+                    Rating: 
+                    <FaceDizzy32 v-if="userDetails.review.rating === 1" class="rating-icon-comment" />
+                    <FaceDissatisfied32 v-else-if="userDetails.review.rating === 2" class="rating-icon-comment" />
+                    <FaceNeutral32 v-else-if="userDetails.review.rating === 3" class="rating-ico-comment" />
+                    <FaceActivated32 v-else-if="userDetails.review.rating === 4" class="rating-icon-comment" />
+                    <FaceCool32 v-else class="rating-icon-comment" />
+                </div>
+                <p>
+                    {{ userDetails.review.comment }}
+                </p>
+            </div>
+            <div class="other-comments-section">
+                <h4>Other Comments</h4>
             </div>
         </div>
         <CvModal
@@ -70,6 +88,37 @@
             <template #primary-button>
                 Add Comment
                 <CvLoading v-if="isLoadingAddComment" :active="isLoadingAddComment" :class="$styleUtils['loading-small']"/>
+            </template>
+        </CvModal>
+        <CvModal
+            :visible="editCommentVisible"
+            @modal-hidden="modalHiddenEdit"
+            @primary-click="editReview"
+        >
+            <template #title>
+                Edit review
+            </template>
+            <template #content>
+                <span class="rating-text">Rate user!</span>
+                <div>
+                    <FaceDizzy32 class="rating-icon" :class="edit.rating === 1 ? 'choosen' : ''" @click="edit.rating = 1" />
+                    <FaceDissatisfied32 class="rating-icon" :class="edit.rating === 2 ? 'choosen' : ''" @click="edit.rating = 2" />
+                    <FaceNeutral32 class="rating-icon" :class="edit.rating === 3 ? 'choosen' : ''" @click="edit.rating = 3" />
+                    <FaceActivated32 class="rating-icon" :class="edit.rating === 4 ? 'choosen' : ''" @click="edit.rating = 4" />
+                    <FaceCool32 class="rating-icon" :class="edit.rating === 5 ? 'choosen' : ''" @click="edit.rating = 5" />
+                </div>
+                <CvTextArea
+                    label="Comment content"
+                    placeholder="comment"
+                    v-model="edit.comment"
+                />
+            </template>
+            <template #secondary-button>
+                Cancel
+            </template>
+            <template #primary-button>
+                Edit Comment
+                <CvLoading v-if="isLoadingEditComment" :active="isLoadingEditComment" :class="$styleUtils['loading-small']"/>
             </template>
         </CvModal>
     </div>
@@ -111,25 +160,47 @@ export default {
             isLoading: false,
             isMy: this.$store.state.user.id === this.$route.params.id,
             addCommentVisible: false,
+            editCommentVisible: false,
             form: {
                 rating: null,
                 comment: '',
             },
+            edit: {
+                rating: null,
+                comment: '',
+            },
             isLoadingAddComment: false,
+            isLoadingEditComment: false,
             ratingInvalid: null,
             serverError: null,
+            commentPage: 0,
+            commentLimit: 50,
+
         };
     },
-    created() {
+    async created() {
         this.getUserData();
+        const reviews = await axios.get(`users/reviews/${this.commentPage}`, {
+            params: {
+                limit: this.commentLimit,
+                userId: this.$route.params.id,
+            },
+        });
+        console.log(reviews.data);
     },
     methods: {
         showModal() {
             this.addCommentVisible = true;
         },
+        showModalEdit() {
+            this.editCommentVisible = true;
+        },
         modalHidden() {
             this.addCommentVisible = false;
             this.form.rating = null;
+        },
+        modalHiddenEdit() {
+            this.editCommentVisible = false;
         },
         ratingValidation() {
             if(this.form.rating === null) this.ratingInvalid = 'Rating is required';
@@ -159,7 +230,24 @@ export default {
             this.form.comment = '';
             setTimeout(() => {
                 this.getUserData();
-            }, 500)
+            }, 500);
+        },
+        async editReview() {
+            this.isLoadingEditComment = true;
+            await axios.post('users/updateReview', {
+                posterId: this.$store.state.user.id,
+                reviewedId: this.$route.params.id,
+                rating: this.edit.rating,
+                comment: this.edit.comment,
+                token: this.$store.state.user.token,
+            }).catch(() => {
+                this.isLoadingEditComment = false;
+            });
+            this.isLoadingEditComment = false;
+            this.editCommentVisible = false;
+            setTimeout(() => {
+                this.getUserData();
+            }, 500);
         },
         async getUserData() {
             this.isLoading = true;
@@ -168,7 +256,6 @@ export default {
                     id: this.$store.state.user.id,
                 }
             });
-            console.log(userInfo.data);
             this.userDetails.name = userInfo.data.name;
             this.userDetails.surname = userInfo.data.surname;
             this.userDetails.email = userInfo.data.email;
@@ -181,8 +268,10 @@ export default {
                 comment: userInfo.data?.review?.comment || null,
                 id: userInfo.data?.review?.id || null,
             }
+            this.edit.rating = userInfo.data?.review?.rating || null;
+            this.edit.comment = userInfo.data?.review?.comment || '';
+
             this.isLoading = false;
-            // console.log(this.userDetails.review);
         }
     },
 }
@@ -267,6 +356,26 @@ h1 {
 }
 .choosen {
     color: $button-primary;
+}
+
+.rating-icon-comment {
+    margin-left: 15px;
+    color: $button-primary;
+}
+
+.comment-rating-section {
+    margin: 15px 0;
+    display: flex;
+    align-items: center;
+}
+
+.your-comment-section {
+    padding: 30px 0;
+    border-bottom: 2px solid $text-04;
+}
+
+.other-comments-section {
+    padding: 30px 0 100px;
 }
 </style>
 
