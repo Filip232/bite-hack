@@ -25,11 +25,12 @@
       </router-link>
     </div>
     <div :class="$style['modal-wrapper']" v-else>
-      <CvButton @click="triggerModal">
+      <CvButton :class="$styleUtils['w-100p']" @click="triggerModal">
         <p v-text="user.username" />
         <img :src="user.imagePath">
         <Close16 v-if="showModal" />
       </CvButton>
+      {{ $store.state.user }}
       <Modal v-show="showModal" :username="user.username" :userId="user.id" />
     </div>
     
@@ -78,6 +79,7 @@ export default {
   justify-content: space-between;
   padding: $spacing-05;
   background-color: $carbon--gray-90;
+  z-index: 1000;
 
   &__buttons {
     display: flex;

@@ -81,10 +81,10 @@ export default {
                 this.isLoading = false;
             });
             if (this.serverError) return;
-
+            console.log(data)
             this.$store.commit('saveUserData', data);
             this.isLoading = false;
-            this.$router.push('/');
+            //this.$router.push('/');
         },
         emailValidation() {
             if(this.form.email === '') this.emailInvalid = 'Email is required';
