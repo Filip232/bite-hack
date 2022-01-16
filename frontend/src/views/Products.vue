@@ -20,9 +20,15 @@
         </div>
       </router-link>
     </div>
-    <CvButton @click="nextPage" >
+    <div :class="$styleUtils['d-f']">
+      <CvButton v-if="currentPage !== 0" @click="prevPage" >
+      {{ parseInt(currentPage)-1 }}
+    </CvButton>
+    <CvButton v-if="currentPAge !== maxPage" @click="nextPage" >
       {{ parseInt(currentPage)+1 }}
     </CvButton>
+    </div>
+    
   </div>
 </template>
 
@@ -49,11 +55,14 @@ export default {
     const data = await axios.get('/products/productList/0');
     this.maxPage = data.data.maxPage;
     this.productList = data.data.products;
-    console.log(data)
   },
   methods: {
     nextPage() {
       this.currentPage = parseInt(this.currentPage)+ 1;
+      this.$router.push(`/products/all/${this.currentPage}`)
+    },
+    prevPage() {
+      this.currentPage = parseInt(this.currentPage)- 1;
       this.$router.push(`/products/all/${this.currentPage}`)
     }
   }
