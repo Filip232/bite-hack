@@ -20,11 +20,9 @@
         </div>
       </router-link>
     </div>
-    <router-link :to="`/products/all/${$router }`">
-    <CvButton >
-      {{ $route.params.id }}
+    <CvButton @click="nextPage" >
+      {{ parseInt(currentPage)+1 }}
     </CvButton>
-    </router-link>
   </div>
 </template>
 
@@ -35,6 +33,7 @@ export default {
   name: 'Products',
   data() {
     return {
+      currentPage: this.$route.params.page || 0,
       maxPage: 1,
       productList: {
         productName: null,
@@ -53,9 +52,10 @@ export default {
     console.log(data)
   },
   methods: {
-    // nextPage() {
-    //   this.$router.push(`/products/all/${this.}`)
-    // }
+    nextPage() {
+      this.currentPage = parseInt(this.currentPage)+ 1;
+      this.$router.push(`/products/all/${this.currentPage}`)
+    }
   }
 }
 </script>
