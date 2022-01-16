@@ -4,11 +4,11 @@
       <img :class="[$style.logo, $styleUtils['as-c']]" src="@/assets/logo.png" alt="Logo" >
     </router-link>
     <div :class="$styleUtils['d-f']">
-      <router-link :class="[$styleUtils['mr-5vw'], $styleUtils['as-c']]" to="/" v-text="'Test'" />
-      <router-link :class="[$styleUtils['mr-5vw'], $styleUtils['as-c']]" to="/" v-text="'Test'" />
-      <router-link :class="[$styleUtils['mr-5vw'], $styleUtils['as-c']]"  to="/" v-text="'Test'" />
-      <router-link :class="[$styleUtils['mr-5vw'], $styleUtils['as-c']]"  to="/" v-text="'Test'" />
-      <router-link :class="[$styleUtils['as-c']]"  to="/" v-text="'Test'" />
+      <router-link :class="[$styleUtils['mr-5vw'], $styleUtils['as-c']]" to="/" v-text="'All'" />
+      <router-link :class="[$styleUtils['mr-5vw'], $styleUtils['as-c']]" to="/" v-text="categories[0]" />
+      <router-link :class="[$styleUtils['mr-5vw'], $styleUtils['as-c']]"  to="/" v-text="categories[1]" />
+      <router-link :class="[$styleUtils['mr-5vw'], $styleUtils['as-c']]"  to="/" v-text="categories[2]" />
+      <router-link :class="[$styleUtils['as-c']]"  to="/" v-text="categories[3]" />
     </div>
     <div :class="$style.header__buttons" v-if="!user.token">
       <router-link :class="[$style['header__buttons--link'], $styleUtils['mr-5']]" to="/login">
@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import { CvButton } from '@carbon/vue/src';
 import { Login16, FaceActivatedAdd16, Close16 } from '@carbon/icons-vue';
 import Modal from '@/components/MainPage/Header/Modal/Modal.vue'
@@ -52,13 +53,19 @@ export default {
   data() {
     return {
       user: this.$store.state.user,
-      showModal: false
+      showModal: false,
+      categories: [],
     }
   },
   watch: {
     $route() {
       this.showModal = false;
     }
+  },
+  async created() {
+    const { data } = await axios.get('products/data/categories');
+    this.categories = data.categories;
+    console.log(this.categories);
   },
   methods: {
     triggerModal() {
