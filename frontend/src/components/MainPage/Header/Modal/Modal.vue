@@ -28,21 +28,22 @@ export default {
   props: {
     userId: {
       type: String,
-      required: true
+      required: true,
     },
     username: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   components: {
     Logout16,
-    CvButton
+    CvButton,
   },
   methods: {
     async logout() {
-      await axios.post('/users/logout', {token: this.$store.state.user.token, id: this.$store.state.user.id})
-      this.$store.commit('setToken', undefined)
+      await axios.post('/users/logout', {token: this.$store.state.user.token, id: this.$store.state.user.id});
+      this.$store.commit('setToken', null);
+      this.$router.push('/');
     }
   }
 }
