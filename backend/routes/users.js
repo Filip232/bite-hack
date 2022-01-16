@@ -81,7 +81,7 @@ router.post('/login', (req, res) => {
               obj.sessionToken = hash;
               obj.save();
 
-              return res.status(200).send({id: obj._id, token, username: obj.username, email: obj.email, name: obj.name, surname: obj.surname});
+              return res.status(200).send({id: obj._id, token, username: obj.username, email: obj.email, name: obj.name, surname: obj.surname, imagePath: obj.imagePath});
           });
       });
   });
