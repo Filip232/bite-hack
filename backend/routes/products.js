@@ -43,12 +43,22 @@ router.get("/productList/:page", (req, res) => {
     .limit(limit)
     .exec((err, doc) => {
       if (err) return console.log(err);
-
       Product.countDocuments({category}).exec((err, count) => {
         if (err) return console.log(err);
         return res.status(200).send({total: count, page: page, pageSize: doc.length, products: doc, maxPage: Math.ceil(count/limit)});
       });
     });
+});
+
+router.get('/:id', (req, res) => {
+  const product = req.params.id;
+
+  Product.findById(product, (err, obj) => {
+    User.findById(obj.ownerId, (err, user) => {
+      if (err) return console.log(err);
+      return res.status(200).send({productName: obj.productName, images: obj.images, ownerId:obj.ownerId, location: obj.location, description: obj.description, category: obj.category, username: user.username});  
+    });
+  });
 });
 
 

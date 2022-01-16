@@ -14,9 +14,10 @@ function updateAvgScore(userId) {
         if (err) return console.log(err);
         obj.avgRating = avg;
         obj.save();
-      })
-    })
-}
+        return console.log('done');
+      });
+    });
+};
 
 router.post('/register', (req, res) => {
   const username = req.body.username;
@@ -174,6 +175,24 @@ router.get('/:id', (req, res) => {
     if (err) return console.log(err);
     return res.status(200).send({name: obj.name, surname: obj.surname, username:obj.username, created: obj.created, email: obj.email, tel: obj.tel, imagePath: obj.imagePath, avgRating: obj.avgRating});
   })
+});
+
+router.get("/reviews/:page", (req, res) => {
+  const page = parseInt(req.params.page) || 0; //for next page pass 1 here
+  const limit = parseInt(req.query.limit) || 50;
+  const userId = req.query.userId;
+  Review.find({reviewedId: userId})
+    .sort({ update_at: -1 })
+    .skip(page * limit) //Notice here
+    .limit(limit)
+    .exec((err, doc) => {
+      if (err) return console.log(err);
+
+      Review.countDocuments({reviewedId: userId}).exec((err, count) => {
+        if (err) return console.log(err);
+        return res.status(200).send({total: count, page: page, pageSize: doc.length, users: doc, maxPage: Math.ceil(count/limit)});
+      });
+    });
 });
 
 module.exports = router;
