@@ -17,7 +17,7 @@ router.post('/add', (req, res) => {
   const token = req.body.token;
   const category = req.body.category;
 
-  if (!ownerId || !images || !description || !productName || !location || !token || !category) return res.status(400).send({msg: 'Missing data. Check input.'});
+  if (!ownerId || !description || !productName || !location || !token || !category) return res.status(400).send({msg: 'Missing data. Check input.'});
 
   User.findOne({_id: ownerId}, (err, obj) => {
     if (err) return console.log(err);
@@ -42,9 +42,9 @@ router.get("/productList/:page", (req, res) => {
   const category = req.query.category;
   let query;
   if (category) {
-    query = {category};
+    query = {category, reserved: false};
   } else {
-    query = {}
+    query = {reserved: false}
   }
   console.log(page, limit, category);
   Product.find(query)
@@ -77,8 +77,29 @@ router.get('/:id', (req, res) => {
 });
 
 router.get('/data/categories', (req, res) => {
-  return res.status(200).send({categories: ['Elektronika', 'Dom', 'Rozrywka', 'Moda', 'Inne', 'Wszystko']});
+  return res.status(200).send({categories: ['Elektronika', 'Dom', 'Rozrywka', 'Moda', 'Inne']});
 });
 
+router.post('/reserve/:id', (req, res) => {
+  const userId = req.body.userId;
+  const productId = req.params.id;
+
+  Product.findById(productId, (err, obj) => {
+    if (err) return console.log(err);
+    obj.reserved = true;
+    obj.reserveeId = userId;
+    obj.save(err => {
+      if (err) return console.log(err);
+    });
+    User.findById(userId, (err, user) => {
+      if (err) return console.log(err);
+      user.reservedProducts.push(productId);
+      user.save(err => {
+        if (err) return console.log(err);
+      });
+      return res.status(201).send({msg: 'Reserved product'});
+    });
+  });
+});
 
 module.exports = router;
