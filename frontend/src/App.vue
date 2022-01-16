@@ -89,4 +89,8 @@ h1 {
 h2 {
   font-size: map.get($heading-06, font-size);
 }
+
+h3 {
+  font-size: map.get($heading-03, font-size);
+}
 </style>

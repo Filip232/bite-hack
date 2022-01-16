@@ -5,10 +5,15 @@
         <div :class="[$styleUtils['w-50p'], $style['product__img-box']]">
           <img :class="$style['product__img']" src="@/assets/szafa.png" alt="szafa">
         </div>
-        <div :class="$styleUtils['w-50p']">
-          <h3>{{ product.productName }}</h3>
-          <p>{{ product.description }}</p>
-          <p>{{ product.location }}</p>
+        <div :class="[$styleUtils['w-50p'], $style['product__text']]">
+          <div>
+            <h3 :class="$style['h3']">{{ product.productName }}</h3>
+            <p  :class="$style['description']">{{ product.description }}</p>
+          </div>
+          <div :class="$style['description-2-box']">
+            <p  :class="$style['description-2']">{{ product.location }}</p>
+            <p :class="$style['description-2']">User Name</p>
+          </div>
         </div>
       </div>
     </div>
@@ -48,6 +53,8 @@ export default {
 <style lang="scss" src="@/assets/utils.module.scss" module="$styleUtils"></style>
 
 <style lang="scss" module>
+@use 'sass:map';
+
 @import '@carbon/colors/scss/colors';
 @import '@carbon/themes/scss/themes';
 
@@ -57,8 +64,9 @@ export default {
 
 .product-list {
   display: grid;
-  grid-template-columns: repeat(2, 30%);
+  grid-template-columns: repeat(3, 25%);
   column-gap: $spacing-08;
+  row-gap: $spacing-08;
   justify-content: space-evenly;
 }
 
@@ -69,12 +77,30 @@ export default {
   &__img {
     width: 100%;
     height: 100%;
-    object-fit: fill;
-
-    &-box {
-      width: 1000px;
-      height: 200px;
-    }
+    padding: $spacing-04;
+    object-fit: contain;
   }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: $spacing-04 $spacing-04 $spacing-04 0;
+  }
+}
+
+.description {
+  font-size: 12px;
+}
+
+.description-2 {
+  display: inline-block;
+  font-size: 14px;
+  text-align: end;
+}
+
+.description-2-box {
+  display: flex;
+  justify-content: space-between;
 }
 </style>
