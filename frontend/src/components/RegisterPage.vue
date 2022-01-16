@@ -20,17 +20,20 @@
       <CvTextInput :class="$style['input']" label="Name" v-model="form.name" placeholder="Name" :invalid-message="formErrors.invalidName" @blur="checkNameValidation"></CvTextInput>
       <CvTextInput :class="$style['input']" label="Surname" v-model="form.surname" placeholder="Surname" :invalid-message="formErrors.invalidSurname" @blur="checkSurnameValidation"></CvTextInput>
       <CvTextInput :class="$style['input']" label="Password" type="password" v-model="form.password" placeholder="Password" :invalid-message="formErrors.invalidPassword" @blur="checkPasswordValidation"></CvTextInput>
-      <CvButton :class="$styleUtils['mt-6']">Create Account</CvButton>
+      <CvButton :class="$styleUtils['mt-6']">
+        <span :class="isLoading ? $style['pr-10'] : $style['pr-30']">Create Account</span>
+        <CvLoading v-if="isLoading" :active="isLoading" :class="$styleUtils['loading-small']"/>
+      </CvButton>
     </CvForm>
     <div :class="$style['navigation']">
-        <router-link to="/home" v-text="'Back to home page'" :class="$styleUtils['p-2']" />
+        <router-link to="/" v-text="'Back to home page'" :class="$styleUtils['p-2']" />
         <router-link to="/login" v-text="'Do you have account? Sign in!'" :class="$styleUtils['p-2']" />
     </div>
   </div>
 </template>
 
 <script>
-import { CvButton, CvTextInput, CvForm } from '@carbon/vue'
+import { CvButton, CvTextInput, CvForm, CvLoading } from '@carbon/vue'
 import axios from 'axios';
 import { CvToastNotification } from '@carbon/vue'
 
@@ -40,7 +43,8 @@ export default {
     CvButton,
     CvTextInput,
     CvForm,
-    CvToastNotification
+    CvToastNotification,
+    CvLoading,
   },
   data() {
     return {
@@ -58,15 +62,21 @@ export default {
         invalidSurname: null,
         invalidPassword: null,
       },     
-      serverError: null
+      serverError: null,
+      isLoading: false,
     }
   },
   methods: {
     async register() {
       this.serverError = null
+      this.isLoading = true;
       await axios.post('users/register', this.form)
-        .catch((error) => this.serverError = error.response.data.msg)
+        .catch((error) => {
+          this.serverError = error.response.data.msg
+          this.isLoading = false;
+        })
       if (!this.serverError) {
+        this.isLoading = false;
         this.$router.push('/login');
       }
     },
@@ -144,6 +154,7 @@ export default {
   flex-direction: column;
   width: 100%;
   height: 100%;
+  padding: 2.5rem 0;
   // color: $primary;
   // background-color: $background;
 }
@@ -151,7 +162,6 @@ export default {
 .register-box {
   margin-top: $spacing-08;
   width: 40%;
-  height: 40%;
   // background-color: $secondary;
 }
 
@@ -160,5 +170,12 @@ export default {
   justify-content: space-between;
   width: 40%;
   margin: $spacing-08 auto 0;
+}
+
+.pr-10 {
+  padding-right: 10px;
+}
+.pr-30 {
+  padding-right: 30px;
 }
 </style>
