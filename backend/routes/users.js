@@ -170,11 +170,25 @@ router.delete('/deleteReview', (req, res) => {
 
 router.get('/:id', (req, res) => {
   const user = req.params.id;
+  const myId = req.query.id;
 
   User.findById(user, (err, obj) => {
     if (err) return console.log(err);
-    return res.status(200).send({name: obj.name, surname: obj.surname, username:obj.username, created: obj.created, email: obj.email, tel: obj.tel, imagePath: obj.imagePath, avgRating: obj.avgRating});
-  })
+    Review.findOne({posterId: myId}, (err, myReview) => {
+      if (err) return console.log(err);
+      let review;
+      if (myReview) {
+        review = {
+          rating: myReview.rating,
+          comment: myReview.comment,
+          id: myReview._id
+        } 
+      } else {
+        review = null;
+      };
+      return res.status(200).send({name: obj.name, surname: obj.surname, username:obj.username, created: obj.created, email: obj.email, tel: obj.tel, imagePath: obj.imagePath, avgRating: obj.avgRating, review});
+    });
+  });
 });
 
 router.get("/reviews/:page", (req, res) => {
