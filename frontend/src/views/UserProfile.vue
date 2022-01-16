@@ -61,6 +61,7 @@
                 <CvTextArea
                     label="Comment content"
                     placeholder="comment"
+                    v-model="form.comment"
                 />
             </template>
             <template #secondary-button>
@@ -115,18 +116,8 @@ export default {
             serverError: null,
         };
     },
-    async created() {
-        this.isLoading = true;
-        const userInfo = await axios.get(`users/${this.$route.params.id}`);
-        this.userDetails.name = userInfo.data.name;
-        this.userDetails.surname = userInfo.data.surname;
-        this.userDetails.email = userInfo.data.email;
-        this.userDetails.tel = userInfo.data.tel;
-        this.userDetails.created = dayjs(userInfo.data.created).format('D MMMM YYYY');
-        this.userDetails.imagePath = userInfo.data.imagePath;
-        this.userDetails.avgRating = userInfo.data.avgRating;
-
-        this.isLoading = false;
+    created() {
+        this.getUserData();
     },
     methods: {
         showModal() {
@@ -141,7 +132,6 @@ export default {
             else this.ratingInvalid = null;
         },
         async addReview() {
-            console.log('clicked');
             this.ratingValidation();
             if (this.form.rating === null) return;
             this.serverError = null;
@@ -154,13 +144,29 @@ export default {
                 token: this.$store.state.user.token,
             }).catch(err => {
                 this.serverError = err.response.data.msg;
-                this.isLoading = false;
+                this.isLoadingAddComment = false;
             });
 
             if (this.serverError) return;
             
             this.isLoadingAddComment = false;
             this.addCommentVisible = false;
+            setTimeout(() => {
+                this.getUserData();
+            }, 500)
+        },
+        async getUserData() {
+            this.isLoading = true;
+            const userInfo = await axios.get(`users/${this.$route.params.id}`);
+            this.userDetails.name = userInfo.data.name;
+            this.userDetails.surname = userInfo.data.surname;
+            this.userDetails.email = userInfo.data.email;
+            this.userDetails.tel = userInfo.data.tel;
+            this.userDetails.created = dayjs(userInfo.data.created).format('D MMMM YYYY');
+            this.userDetails.imagePath = userInfo.data.imagePath;
+            this.userDetails.avgRating = userInfo.data.avgRating;
+            console.log(this.userDetails.avgRating);
+            this.isLoading = false;
         }
     },
 }
