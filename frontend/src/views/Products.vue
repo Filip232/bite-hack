@@ -1,9 +1,9 @@
 <template>
   <div :class="[$style['wrapper'], $styleUtils['pt-13']]">
     <div :class="$style['product-list']">
-      <router-link v-for="product in productList" :key="product._id" :class="$style['product']" :to="`/products/${product._id}`">
+      <router-link v-for="product in productList" :key="product._id" :class="[$style['product'], $styleUtils['c-primary']]" :to="`/products/${product._id}`">
         <div :class="[$styleUtils['w-50p'], $style['product__img-box']]">
-          <img :class="$style['product__img']" src="@/assets/szafa.png" alt="szafa">
+          <img :class="$style['product__img']" :src="product.image">
         </div>
         <div :class="[$styleUtils['w-50p'], $style['product__text']]">
           <div>
@@ -17,9 +17,11 @@
         </div>
       </router-link>
     </div>
-    <CvButton v-for="page in maxPage" :key="page">
-      <router-link :to="`/products/${page}`">{{ page }}</router-link>
+    <router-link :to="`/products/all/${$route.params.id +1}`">
+    <CvButton >
+      {{ $route.params.id +1 }}
     </CvButton>
+    </router-link>
   </div>
 </template>
 
@@ -59,7 +61,7 @@ export default {
 @import '@carbon/themes/scss/themes';
 
 .wrapper {
-  margin: 0 auto;
+  margin: 0 5vw;
 }
 
 .product-list {
