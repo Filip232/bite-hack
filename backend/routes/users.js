@@ -21,7 +21,7 @@ function updateAvgScore(userId) {
 
 function getUsernameById(userId) {
   return User.findOne({ '_id': userId });
-}
+};
 
 router.post('/register', (req, res) => {
   const username = req.body.username;
@@ -249,6 +249,23 @@ router.post('/updateUser', (req, res) => {
       obj.save();
       return res.status(200).send({msg: 'User updated'});
       };
+    });
+  });
+});
+
+router.post('/logout', (req, res) => {
+  const token = req.body.token;
+  const userId = req.body.id;
+
+  User.findById(userId, (err, obj) => {
+    if (err) return console.log(err);
+
+    bcrypt.compare(token, obj.sessionToken, (err, result) => {
+      if (err) return console.log(err);
+      if (!result) return res.status(401).send({msg: 'Wrong token.'});
+      obj.sessionToken = '';
+      obj.save();
+      return res.status(200).send({msg: 'Session ended...'});
     });
   });
 });
