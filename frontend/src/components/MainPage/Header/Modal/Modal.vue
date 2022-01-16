@@ -1,13 +1,15 @@
 <template>
   <div :class="$style.modal">
-    <CvButton :class="[$styleUtils['w-100p']]">
-      <router-link :class="$styleUtils['c-primary']" :to="`/users/${userId}`">Profile info</router-link>
+    <router-link :class="$styleUtils['c-primary']" :to="`/users/${userId}`">
+      <CvButton :class="[$styleUtils['w-100p']]">
+          Profile info
+      </CvButton>
+    </router-link>
+    <CvButton disabled :class="[$styleUtils['w-100p'], $style.disabled]">
+      My products
     </CvButton>
     <CvButton disabled :class="[$styleUtils['w-100p'], $style.disabled]">
-      <router-link :class="$style['disabled--text']" to="/" v-text="'My products'" />
-    </CvButton>
-    <CvButton disabled :class="[$styleUtils['w-100p'], $style.disabled]">
-      <router-link :class="$style['disabled--text']" to="/" v-text="'Add product'" />
+      Add product
     </CvButton>
     <CvButton @click="logout" :class="$styleUtils['w-100p']">
       <p v-text="'Logout'" />
@@ -63,9 +65,6 @@ export default {
 
 .disabled {
   background-color: $carbon--gray-60 !important;
-
-  &--text {
-    color: $carbon--gray-90 !important;
-  }
+  color: $carbon--gray-90 !important;
 }
 </style>
