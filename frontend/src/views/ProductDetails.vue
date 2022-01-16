@@ -20,7 +20,7 @@
         </p>
         <router-link :to="`/users/${product.ownerId}`" v-text="product.username" />
       </div>
-      <p v-if="product.rating != -1" :class="$styleUtils['mb-5']">
+      <p v-if="product.rating !== -1" :class="$styleUtils['mb-5']">
         User rating: {{ product.rating }}
       </p>
       <CvButton>
