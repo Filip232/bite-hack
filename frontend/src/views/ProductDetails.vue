@@ -20,6 +20,9 @@
         </p>
         <router-link :to="`/users/${product.ownerId}`" v-text="product.username" />
       </div>
+      <p v-if="product.rating !== -1" :class="$styleUtils['mb-5']">
+        User rating: {{ product.rating }}
+      </p>
       <CvButton>
         Order
       </CvButton>
@@ -46,7 +49,8 @@ export default {
           username: null,
           location: null,
           ownerId: null,
-          images: null
+          images: null,
+          rating: null
         },
         isLoading: false,
         displayed: ''
@@ -62,7 +66,8 @@ export default {
     this.product.location = productInfo.data.location;
     this.product.ownerId = productInfo.data.ownerId;
     this.product.images = productInfo.data.images;
-    this.displayed = this.product.images[0]
+    this.product.rating = productInfo.data.avgRating;
+    this.displayed = this.product.images[0];
     this.isLoading = false;
   },
   methods: {
@@ -94,7 +99,7 @@ export default {
       display: block;
       margin-left: auto;
       margin-right: auto;
-      width: 40%;
+      width: 50%;
       margin-bottom: $spacing-08;
     }
 
@@ -104,6 +109,7 @@ export default {
       flex: 0 1 auto;
       margin-bottom: $spacing-07;
       min-width: 5%;
+      max-width: 25%;
     }
 
     &--title {

@@ -25,12 +25,12 @@ router.post('/add', (req, res) => {
     bcrypt.compare(token, obj.sessionToken, (err, result) => {
       if (err) return console.log(err);
 
-      if (!result) res.status(401).send({msg: 'Wrong session token.'});
+      if (!result) return res.status(401).send({msg: 'Wrong session token.'});
 
       const product = new Product({ownerId, images, description, productName, location, category});
       product.save( (err, product) => {
         if (err) return res.status(401).send({msg: "Couldn't save product. Check input data.", err: err});
-        res.status(201).send({msg: 'Product added!', productId: product._id});
+        return res.status(201).send({msg: 'Product added!', productId: product._id});
       });
     }); 
   });
@@ -71,7 +71,7 @@ router.get('/:id', (req, res) => {
   Product.findById(product, (err, obj) => {
     User.findById(obj.ownerId, (err, user) => {
       if (err) return console.log(err);
-      return res.status(200).send({productName: obj.productName, images: obj.images, ownerId:obj.ownerId, location: obj.location, description: obj.description, category: obj.category, username: user.username});  
+      return res.status(200).send({productName: obj.productName, images: obj.images, ownerId:obj.ownerId, location: obj.location, description: obj.description, category: obj.category, username: user.username, avgRating: user.avgRating});  
     });
   });
 });
