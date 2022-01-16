@@ -19,6 +19,10 @@ function updateAvgScore(userId) {
     });
 };
 
+function getUsernameById(userId) {
+  return User.findOne({ '_id': userId });
+};
+
 router.post('/register', (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
@@ -195,6 +199,7 @@ router.get("/reviews/:page", (req, res) => {
   const page = parseInt(req.params.page) || 0; //for next page pass 1 here
   const limit = parseInt(req.query.limit) || 50;
   const userId = req.query.userId;
+
   Review.find({reviewedId: userId})
     .sort({ update_at: -1 })
     .skip(page * limit) //Notice here
@@ -202,8 +207,13 @@ router.get("/reviews/:page", (req, res) => {
     .exec((err, doc) => {
       if (err) return console.log(err);
 
-      Review.countDocuments({reviewedId: userId}).exec((err, count) => {
+      Review.countDocuments({reviewedId: userId}).exec(async (err, count) => {
         if (err) return console.log(err);
+        for (let i = 0; i < doc.length; i++) {
+          const userDetails = await getUsernameById(doc[i].posterId);
+          const toSave = { ...doc[i] }
+          toSave['_doc'].username = userDetails.username;
+        }
         return res.status(200).send({total: count, page: page, pageSize: doc.length, reviews: doc, maxPage: Math.ceil(count/limit)});
       });
     });

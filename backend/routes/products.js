@@ -4,6 +4,10 @@ const Product = require('../models/product');
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
 
+function getUsernameById(userId) {
+  return User.findOne({ '_id': userId });
+};
+
 router.post('/add', (req, res) => {
   const ownerId = req.body.ownerId;
   const images = req.body.images;
@@ -49,8 +53,13 @@ router.get("/productList/:page", (req, res) => {
     .limit(limit)
     .exec((err, doc) => {
       if (err) return console.log(err);
-      Product.countDocuments(query).exec((err, count) => {
+      Product.countDocuments(query).exec(async (err, count) => {
         if (err) return console.log(err);
+        for (let i = 0; i < doc.length; i++) {
+          const userDetails = await getUsernameById(doc[i].ownerId);
+          const toSave = { ...doc[i] }
+          toSave['_doc'].username = userDetails.username;
+        }
         return res.status(200).send({total: count, page: page, pageSize: doc.length, products: doc, maxPage: Math.ceil(count/limit)});
       });
     });
