@@ -28,7 +28,8 @@ export default {
   flex-direction: column;
   align-items: center;
     &--logo {
-      font-size: 2rem;
+      font-size: 72px;
+      color: $button-primary;
     }
     &--sub {
       font-size: 1.5rem;
