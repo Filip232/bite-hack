@@ -196,7 +196,7 @@ router.get('/:id', (req, res) => {
 });
 
 router.get("/reviews/:page", (req, res) => {
-  const page = parseInt(req.params.page) || 0; //for next page pass 1 here
+  const page = parseInt(req.params.page) || 0; 
   const limit = parseInt(req.query.limit) || 50;
   const userId = req.query.userId;
 
@@ -272,13 +272,32 @@ router.post('/logout', (req, res) => {
 
 router.get('/reservedProducts/:id', (req, res) =>{
   const userId = req.params.id;
-  User.findById(userId, (err, obj) => {
+  Product.find({reserveeId: userId}, async (err, array) => {
     if (err) return console.log(err);
-    Product.find({reserveeId: userId}, (err, array) => {
-      if (err) return console.log(err);
-      res.status(201).send({myProducts: array, username: obj.username});
-    });
-  }); 
+    for (let i = 0; i < array.length; ++i) {
+        if (err) return console.log(err);
+        const owner = await getUsernameById(array[i].ownerId);
+        if (owner === null) continue;
+        const toSave = { ...array[i] };
+        toSave['_doc'].ownerUsername = owner.username;
+    };
+    return res.status(201).send({myProducts: array});
+  });
+});
+
+router.get('/myReservedProducts/:id', (req, res) =>{
+  const userId = req.params.id;
+  Product.find({ownerId: userId, reserved: true}, async (err, array) => {
+    if (err) return console.log(err);
+    for (let i = 0; i < array.length; ++i) {
+        if (err) return console.log(err);
+        const reservee = await getUsernameById(array[i].reserveeId);
+        if (reservee === null) continue;
+        const toSave = { ...array[i] };
+        toSave['_doc'].reserveeUsername = reservee.username;
+    };
+    return res.status(201).send({myProducts: array});
+  })
 });
 
 module.exports = router;
