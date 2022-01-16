@@ -5,9 +5,11 @@
           Profile info
       </CvButton>
     </router-link>
-    <CvButton disabled :class="[$styleUtils['w-100p'], $style.disabled]">
-      My products
-    </CvButton>
+    <router-link :class="$styleUtils['c-primary']" :to="`/products/my/${this.$store.state.user.id}`">
+      <CvButton :class="$styleUtils['w-100p']">
+        My products
+      </CvButton>
+    </router-link>
     <router-link :class="$styleUtils['c-primary']" :to="`/products/add`">
       <CvButton :class="$styleUtils['w-100p']">
         Add product

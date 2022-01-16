@@ -4,7 +4,7 @@
       <img :class="[$style.logo, $styleUtils['as-c']]" src="@/assets/logo.png" alt="Logo" >
     </router-link>
     <div :class="$styleUtils['d-f']">
-      <router-link :class="[$styleUtils['mr-5vw'], $styleUtils['as-c']]" to="/" v-text="'All'" />
+      <router-link :class="[$styleUtils['mr-5vw'], $styleUtils['as-c']]" to="/products/all/0" v-text="'All'" />
       <router-link :class="[$styleUtils['mr-5vw'], $styleUtils['as-c']]" to="/" v-text="categories[0]" />
       <router-link :class="[$styleUtils['mr-5vw'], $styleUtils['as-c']]"  to="/" v-text="categories[1]" />
       <router-link :class="[$styleUtils['mr-5vw'], $styleUtils['as-c']]"  to="/" v-text="categories[2]" />

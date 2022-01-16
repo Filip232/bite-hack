@@ -32,8 +32,6 @@ router.post('/register', (req, res) => {
   const surname = req.body.surname;
   const tel = req.body.tel;
 
-  console.log(req.body);
-
   User.findOne({$or:[{email},{username}]}, (err, obj) => {
       if (err) return console.log(err);
 
@@ -89,7 +87,6 @@ router.post('/login', (req, res) => {
 });
 
 router.post('/postReview', (req, res) => {
-  console.log('test');
   const posterId = req.body.posterId;
   const reviewedId = req.body.reviewedId;
   const rating = req.body.rating;
@@ -129,7 +126,6 @@ router.post('/updateReview', (req, res) => {
   const token = req.body.token;
   const rating = req.body.rating;
   const comment = req.body.comment;
-  console.log('test');
   User.findOne({_id: posterId}, (err, obj) => {
     if (err) return console.log(err);
     bcrypt.compare(token, obj.sessionToken, (err, result) => {
@@ -291,6 +287,22 @@ router.get('/myReservedProducts/:id', (req, res) =>{
     if (err) return console.log(err);
     for (let i = 0; i < array.length; ++i) {
         if (err) return console.log(err);
+        const reservee = await getUsernameById(array[i].reserveeId);
+        if (reservee === null) continue;
+        const toSave = { ...array[i] };
+        toSave['_doc'].reserveeUsername = reservee.username;
+    };
+    return res.status(201).send({myProducts: array});
+  })
+});
+
+router.get('/myAllProducts/:id', (req, res) =>{
+  const userId = req.params.id;
+  Product.find({ownerId: userId}, async (err, array) => {
+    if (err) return console.log(err);
+    for (let i = 0; i < array.length; ++i) {
+        if (err) return console.log(err);
+        if (array[i].reserved) continue;
         const reservee = await getUsernameById(array[i].reserveeId);
         if (reservee === null) continue;
         const toSave = { ...array[i] };

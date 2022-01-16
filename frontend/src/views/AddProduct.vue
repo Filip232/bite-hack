@@ -74,7 +74,6 @@ export default {
                 location: this.form.location,
                 token: this.$store.state.user.token,
                 category: this.form.category,
-                images: ['efrerferferferfe','ferfrefreferferfe'],
             }).catch(err => {
                 this.serverError = err.response.data.msg
                 this.isLoading = false;
@@ -82,7 +81,7 @@ export default {
             if(this.serverError) return;
             
             this.isLoading = false;
-            // this.$router.push(`/products/my/${this.$store.state.user.id}`);
+            this.$router.push(`/products/my/${this.$store.state.user.id}`);
         },
     }
 }

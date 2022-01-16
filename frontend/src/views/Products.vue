@@ -1,9 +1,9 @@
 <template>
   <div :class="[$style['wrapper'], $styleUtils['pt-13']]">
-    <div :class="$style['product-list']">
+    <div v-if="productList.length" :class="$style['product-list']">
       <router-link v-for="product in productList" :key="product._id" :class="[$style['product'], $styleUtils['c-primary']]" :to="`/products/${product._id}`">
         <div :class="[$style['product__img-box']]">
-          <img :class="$style['product__img']" :src="product.image">
+          <img :class="$style['product__img']" :src="product.images[0]">
         </div>
         <div :class="$style['product__text']">
           <div :class="$styleUtils['mr-5']">
@@ -20,12 +20,12 @@
         </div>
       </router-link>
     </div>
-    <div :class="$styleUtils['d-f']">
-      <CvButton v-if="currentPage !== 0" @click="prevPage" >
-      {{ parseInt(currentPage)-1 }}
+    <div :class="[$styleUtils['d-f'], $styleUtils['jc-sb']]">
+      <CvButton v-if="currentPage !== String(0)" @click="prevPage" >
+        Previous Page
     </CvButton>
-    <CvButton v-if="currentPAge !== maxPage" @click="nextPage" >
-      {{ parseInt(currentPage)+1 }}
+    <CvButton v-if="String(parseInt(currentPage)+1) !== String(maxPage)" @click="nextPage" >
+      Next Page
     </CvButton>
     </div>
     
@@ -39,7 +39,7 @@ export default {
   name: 'Products',
   data() {
     return {
-      currentPage: this.$route.params.page || 0,
+      currentPage: this.$route.params.page || '0',
       maxPage: 1,
       productList: {
         productName: null,
@@ -51,18 +51,25 @@ export default {
       }
     }
   },
+  watch: {
+    async $route() {
+      const { data } = await axios.get(`/products/productList/${this.currentPage}`);
+      this.productList = data.products;
+    }
+  },
   async created() {
-    const data = await axios.get('/products/productList/0');
-    this.maxPage = data.data.maxPage;
-    this.productList = data.data.products;
+    const { data } = await axios.get('/products/productList/0');
+    if (this.currentPage < 0) this.currentPage = '0';
+    this.maxPage = data.maxPage;
+    this.productList = data.products;
   },
   methods: {
     nextPage() {
-      this.currentPage = parseInt(this.currentPage)+ 1;
+      this.currentPage = String(parseInt(this.currentPage) + 1);
       this.$router.push(`/products/all/${this.currentPage}`)
     },
     prevPage() {
-      this.currentPage = parseInt(this.currentPage)- 1;
+      this.currentPage = String(parseInt(this.currentPage) - 1);
       this.$router.push(`/products/all/${this.currentPage}`)
     }
   }
@@ -98,8 +105,8 @@ export default {
     padding: $spacing-04;
     object-fit: contain;
     &-box {
-      min-width: 5%;
-      max-width: 35%;
+      width: 150px;
+      height: 100px;
     }
   }
 
