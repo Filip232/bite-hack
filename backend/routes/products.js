@@ -76,5 +76,9 @@ router.get('/:id', (req, res) => {
   });
 });
 
+router.get('/data/categories', (req, res) => {
+  return res.status(200).send({categories: ['Elektronika', 'Dom', 'Rozrywka', 'Moda', 'Inne', 'Wszystko']});
+});
+
 
 module.exports = router;
