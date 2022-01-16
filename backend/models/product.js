@@ -7,7 +7,9 @@ const productSchema = new Schema({
   ownerId: {type: Schema.Types.ObjectId, required: true},
   location: {type: String, required: true},
   description: {type: String, required: true, minlength: 10, maxlength: 5000},
-  category: {type: String, required: true, enum: ['Elektronika', 'Dom', 'Rozrywka', 'Moda', 'Inne', 'Wszystko']}
+  category: {type: String, required: true, enum: ['Elektronika', 'Dom', 'Rozrywka', 'Moda', 'Inne']},
+  reserved: {type: Boolean, required: true, default: false},
+  reserveeId: {type: Schema.Types.ObjectId}
 });
 
 
