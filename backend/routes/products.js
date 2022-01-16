@@ -36,14 +36,20 @@ router.get("/productList/:page", (req, res) => {
   const page = parseInt(req.params.page) || 0; //for next page pass 1 here
   const limit = parseInt(req.query.limit) || 50;
   const category = req.query.category;
+  let query;
+  if (category) {
+    query = {category};
+  } else {
+    query = {}
+  }
   console.log(page, limit, category);
-  Product.find({category: category})
+  Product.find(query)
     .sort({ update_at: -1 })
     .skip(page * limit) //Notice here
     .limit(limit)
     .exec((err, doc) => {
       if (err) return console.log(err);
-      Product.countDocuments({category}).exec((err, count) => {
+      Product.countDocuments(query).exec((err, count) => {
         if (err) return console.log(err);
         return res.status(200).send({total: count, page: page, pageSize: doc.length, products: doc, maxPage: Math.ceil(count/limit)});
       });
