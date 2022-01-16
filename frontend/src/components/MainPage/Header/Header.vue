@@ -27,10 +27,9 @@
     <div :class="$style['modal-wrapper']" v-else>
       <CvButton :class="$styleUtils['w-100p']" @click="triggerModal">
         <p v-text="user.username" />
-        <img :src="user.imagePath">
+        <img :class="$style['modal--img']" :src="user.imagePath">
         <Close16 v-if="showModal" />
       </CvButton>
-      {{ $store.state.user }}
       <Modal v-show="showModal" :username="user.username" :userId="user.id" />
     </div>
     
@@ -102,6 +101,11 @@ export default {
   .logo {
     width: 32px;
     height: 32px;
+  }
+
+  .modal--img {
+    width: 20px;
+    height: 20px;
   }
 
   .modal-wrapper {

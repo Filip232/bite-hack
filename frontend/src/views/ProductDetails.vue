@@ -2,7 +2,10 @@
   <div :class="$style.product">
     <CvLoading :active="isLoading" :overlay="true" />
     <div :class="$style['product__body']">
-      <img :class="$style['product__body--image']" src="@/assets/szafa.png">
+      <div :class="[$styleUtils['d-f'], $styleUtils['jc-se']]">
+        <img v-for="img in product.images" :key="img" @click="changeImg(img)" :class="$style['product__body--image']" :src="img">
+      </div>
+      <img :class="$style['product__body--displayed']" :src="displayed"  />
       <h3 :class="[$styleUtils['mb-6'], $style['product__body--title']]"  v-text="product.title" />
       <p :class="$styleUtils['mb-5']">
         Category: {{ product.category }}
@@ -37,16 +40,16 @@ export default {
     return {
       product:
         {
-          id: '1',
           productName: null,
           description: null,
-          image: null,
           category: null,
           username: null,
           location: null,
-          ownerId: null
+          ownerId: null,
+          images: null
         },
-        isLoading: false
+        isLoading: false,
+        displayed: ''
     }
   },
   async created() {
@@ -58,7 +61,15 @@ export default {
     this.product.username = productInfo.data.username;
     this.product.location = productInfo.data.location;
     this.product.ownerId = productInfo.data.ownerId;
+    this.product.images = productInfo.data.images;
+    this.displayed = this.product.images[0]
     this.isLoading = false;
+  },
+  methods: {
+    changeImg(img) {
+      console.log(img);
+      this.displayed = img;
+    }
   }
 }
 </script>
@@ -80,12 +91,20 @@ export default {
     background-color: $carbon--gray-60;
     padding: $spacing-06 $spacing-05;
 
-    &--image {
+    &--displayed {
       display: block;
       margin-left: auto;
       margin-right: auto;
-      margin-bottom: $spacing-07;
       width: 40%;
+      margin-bottom: $spacing-08;
+    }
+
+    &--image {
+      display: block;
+      
+      flex: 0 1 auto;
+      margin-bottom: $spacing-07;
+      min-width: 5%;
     }
 
     &--title {

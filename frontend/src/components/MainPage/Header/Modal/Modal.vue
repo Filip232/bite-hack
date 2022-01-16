@@ -1,13 +1,13 @@
 <template>
   <div :class="$style.modal">
-    <CvButton :class="$styleUtils['w-100p']">
-      <router-link :to="`/users/${userId}`">Profile info</router-link>
+    <CvButton :class="[$styleUtils['w-100p']]">
+      <router-link :class="$styleUtils['c-primary']" :to="`/users/${userId}`">Profile info</router-link>
     </CvButton>
-    <CvButton :class="$styleUtils['w-100p']">
-      <router-link to="/" v-text="'My products'" />
+    <CvButton disabled :class="[$styleUtils['w-100p'], $style.disabled]">
+      <router-link :class="$style['disabled--text']" to="/" v-text="'My products'" />
     </CvButton>
-    <CvButton :class="$styleUtils['w-100p']">
-      <router-link to="/" v-text="'Add product'" />
+    <CvButton disabled :class="[$styleUtils['w-100p'], $style.disabled]">
+      <router-link :class="$style['disabled--text']" to="/" v-text="'Add product'" />
     </CvButton>
     <CvButton @click="logout" :class="$styleUtils['w-100p']">
       <p v-text="'Logout'" />
@@ -19,6 +19,7 @@
 <script>
 import { Logout16 } from '@carbon/icons-vue';
 import { CvButton } from '@carbon/vue/src';
+import axios from 'axios';
 
 export default {
   name: 'Modal',
@@ -37,7 +38,8 @@ export default {
     CvButton
   },
   methods: {
-    logout() {
+    async logout() {
+      await axios.post('/users/logout', {token: this.$store.state.user.token, id: this.$store.state.user.id})
       this.$store.commit('setToken', undefined)
     }
   }
@@ -48,11 +50,22 @@ export default {
 
 
 <style lang="scss" module>
+@import '@carbon/themes/scss/themes';
+@import '@carbon/colors/scss/colors';
+
 .modal {
   position: absolute;
 
   &__button {
     width: 100%;
+  }
+}
+
+.disabled {
+  background-color: $carbon--gray-60 !important;
+
+  &--text {
+    color: $carbon--gray-90 !important;
   }
 }
 </style>
