@@ -72,6 +72,10 @@
   justify-content: center;
 }
 
+.jc-se {
+  justify-content: space-evenly;
+}
+
 .jc-sb {
   justify-content: space-between;
 }
@@ -103,8 +107,10 @@
   transition: 0.3s;
   opacity: 0;
   z-index: 9001;
+  pointer-events: none;
 
   &--opened {
+    pointer-events: auto;
     opacity: 1;
     transition: 0.3s;
   }
