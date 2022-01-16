@@ -81,7 +81,7 @@ router.post('/login', (req, res) => {
               obj.sessionToken = hash;
               obj.save();
 
-              return res.status(200).send({id: obj._id, token, username: obj.username, email: obj.email, name: obj.name, surname: obj.surname});
+              return res.status(200).send({id: obj._id, token, username: obj.username, email: obj.email, name: obj.name, surname: obj.surname, imagePath: obj.imagePath});
           });
       });
   });
@@ -153,16 +153,17 @@ router.post('/updateReview', (req, res) => {
 });
 
 router.delete('/deleteReview', (req, res) => {
-  const posterId = req.body.posterId;
-  const reviewedId = req.body.reviewerId;
-  const token = req.body.token;
+  const posterId = req.query.posterId;
+  const reviewedId = req.query.reviewerId;
+  const token = req.query.token;
   User.findOne({ _id: posterId}, (err, obj) => {
     if (err) return console.log(err);
+
+    // console.log(obj);
 
     bcrypt.compare(token, obj.sessionToken, (err, result) => {
       if (err) return console.log(err);
       if (!result) return res.status(401).send({msg: 'Wrong session token.'});
-      
       Review.deleteOne({posterId, reviewedId}, (err) => {
         if (err) return console.log(err);
         updateAvgScore(reviewedId);
@@ -249,6 +250,23 @@ router.post('/updateUser', (req, res) => {
       obj.save();
       return res.status(200).send({msg: 'User updated'});
       };
+    });
+  });
+});
+
+router.post('/logout', (req, res) => {
+  const token = req.body.token;
+  const userId = req.body.id;
+
+  User.findById(userId, (err, obj) => {
+    if (err) return console.log(err);
+
+    bcrypt.compare(token, obj.sessionToken, (err, result) => {
+      if (err) return console.log(err);
+      if (!result) return res.status(401).send({msg: 'Wrong token.'});
+      obj.sessionToken = '';
+      obj.save();
+      return res.status(200).send({msg: 'Session ended...'});
     });
   });
 });

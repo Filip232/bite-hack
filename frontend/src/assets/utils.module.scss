@@ -72,6 +72,10 @@
   justify-content: center;
 }
 
+.jc-se {
+  justify-content: space-evenly;
+}
+
 .jc-sb {
   justify-content: space-between;
 }
@@ -106,9 +110,11 @@
   right: 5%;
   transition: 0.3s;
   opacity: 0;
-  z-index: 20;
+  z-index: 9001;
+  pointer-events: none;
 
   &--opened {
+    pointer-events: auto;
     opacity: 1;
     transition: 0.3s;
   }
@@ -121,4 +127,8 @@
 .loading-small {
   height: 20px;
   width: 20px;
+}
+
+.c-danger {
+  color: $danger;
 }

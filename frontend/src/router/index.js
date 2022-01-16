@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
-// import store from '@/store/index';
+import store from '@/store/index';
 
 Vue.use(VueRouter);
 
@@ -22,6 +22,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "Login" */ '../views/Login.vue')
   },
   {
+    path: '/users/edit',
+    name: 'EditUser',
+    component: () => import(/* webpackChunkName: "EditUser" */ '../views/EditUser.vue')
+  },
+  {
     path: '/users/:id',
     name: 'UserProfile',
     component: () => import(/* webpackChunkName: "UserProfile" */ '../views/UserProfile.vue')
@@ -31,6 +36,11 @@ const routes = [
     name: 'Products',
     component: () => import(/* webpackChunkName: "Products" */ '../views/Products.vue')
   },
+  {
+    path: '/products/:id',
+    name: 'ProductDetails',
+    component: () => import(/* webpackChunkName: "ProductDetails" */ '../views/ProductDetails.vue')
+  },
 ];
 
 const router = new VueRouter({
@@ -39,9 +49,9 @@ const router = new VueRouter({
   routes,
 });
 
-// router.beforeEach((to, from, next) => {
-//   if ((to.name === 'UserProfile') && !store.state.user.token) next({ name: 'Home' })
-//   else next();
-// });
+router.beforeEach((to, from, next) => {
+  if ((to.name === 'UserProfile') && !store.state.user.token) next({ name: 'Login' })
+  else next();
+});
 
 export default router;
