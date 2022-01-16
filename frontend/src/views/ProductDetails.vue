@@ -1,17 +1,21 @@
 <template>
   <div :class="$style.product">
+    <CvLoading :active="isLoading" :overlay="true" />
     <div :class="$style['product__body']">
       <img :class="$style['product__body--image']" src="@/assets/szafa.png">
       <h3 :class="[$styleUtils['mb-6'], $style['product__body--title']]"  v-text="product.title" />
       <p :class="$styleUtils['mb-5']">
         Category: {{ product.category }}
       </p>
+      <p :class="$styleUtils['mb-5']">
+        Location: {{ product.location }}
+      </p>
       <p :class="$styleUtils['mb-5']" v-text="product.description" />
       <div :class="[$styleUtils['d-f'], $styleUtils['mb-6']]">
         <p :class="$styleUtils['mr-5']">
           User:
         </p>
-        <router-link :to="`/users/${product.ownerId}`" v-text="product.user" />
+        <router-link :to="`/users/${product.ownerId}`" v-text="product.username" />
       </div>
       <CvButton>
         Order
@@ -21,31 +25,39 @@
 </template>
 
 <script>
-//import axios from 'axios';
-import { CvButton } from '@carbon/vue/src';
+import axios from 'axios';
+import { CvButton, CvLoading } from '@carbon/vue/src';
 export default {
   name: 'ProductDetails',
   components: {
-    CvButton
+    CvButton,
+    CvLoading
   },
   data() {
     return {
       product:
         {
           id: '1',
-          title: 'Piekna szafa',
-          description: 'Ladna, stara, ale dobra, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean faucibus ipsum quis orci tempor maximus. Integer posuere cursus sem, a ultrices enim maximus id. Mauris posuere, dolor sit amet sodales facilisis, augue diam pellentesque purus, vitae euismod augue est vel quam. Maecenas maximus mauris id eros maximus consectetur.',
-          image: '@/assets/szafa.png',
-          category: 'other',
-          user: 'Jan Kowalski',
-          ownerId: '61e3420253bdd530bf179044'
+          productName: null,
+          description: null,
+          image: null,
+          category: null,
+          username: null,
+          location: null,
+          ownerId: null
         },
         isLoading: false
     }
   },
   async created() {
     this.isLoading = true;
-    //const productInfo = await axios.get(`products/1`);
+    const productInfo = await axios.get(`products/${this.$route.params.id}`);
+    this.product.productName = productInfo.data.productName;
+    this.product.description = productInfo.data.description;
+    this.product.category = productInfo.data.category;
+    this.product.username = productInfo.data.username;
+    this.product.location = productInfo.data.location;
+    this.product.ownerId = productInfo.data.ownerId;
     this.isLoading = false;
   }
 }

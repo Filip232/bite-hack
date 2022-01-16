@@ -10,7 +10,7 @@
       <router-link :class="[$styleUtils['mr-5vw'], $styleUtils['as-c']]"  to="/" v-text="'Test'" />
       <router-link :class="[$styleUtils['as-c']]"  to="/" v-text="'Test'" />
     </div>
-    <div :class="$style.header__buttons">
+    <div :class="$style.header__buttons" v-if="!user.token">
       <router-link :class="[$style['header__buttons--link'], $styleUtils['mr-5']]" to="/login">
           <p :class="$style['header__buttons--text']">
             Log in
@@ -24,16 +24,41 @@
           <FaceActivatedAdd16 />
       </router-link>
     </div>
+    <div :class="$style['modal-wrapper']" v-else>
+      <CvButton @click="triggerModal">
+        <p v-text="user.username" />
+        <img :src="user.imagePath">
+        <Close16 v-if="showModal" />
+      </CvButton>
+      <Modal v-show="showModal" :username="user.username" :userId="user.id" />
+    </div>
+    
   </div>
 </template>
 
 <script>
-import { Login16, FaceActivatedAdd16 } from '@carbon/icons-vue';
+import { CvButton } from '@carbon/vue/src';
+import { Login16, FaceActivatedAdd16, Close16 } from '@carbon/icons-vue';
+import Modal from '@/components/MainPage/Header/Modal/Modal.vue'
 export default {
   name: 'Header',
   components: {
     Login16,
-    FaceActivatedAdd16
+    Close16,
+    FaceActivatedAdd16,
+    Modal,
+    CvButton
+  },
+  data() {
+    return {
+      user: this.$store.state.user,
+      showModal: false
+    }
+  },
+  methods: {
+    triggerModal() {
+      this.showModal = !this.showModal;
+    }
   }
 }
 </script>
@@ -64,7 +89,6 @@ export default {
       color: $carbon--white-0;
       background-color: $carbon--gray-60;
       padding: $spacing-03 $spacing-04;
-      border-radius: 1rem;
     }
 
     &--text {
@@ -76,6 +100,10 @@ export default {
   .logo {
     width: 32px;
     height: 32px;
+  }
+
+  .modal-wrapper {
+    width: 20vw;
   }
 }
 </style>
