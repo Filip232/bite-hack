@@ -55,6 +55,11 @@ export default {
       showModal: false
     }
   },
+  watch: {
+    $route() {
+      this.showModal = false;
+    }
+  },
   methods: {
     triggerModal() {
       this.showModal = !this.showModal;

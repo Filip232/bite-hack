@@ -8,7 +8,6 @@
       <router-link :class="$style['banner__row--button']" v-text="'Create an offer'" to="/login" />
       <DeliveryParcel32 :class="$style['banner__row--icon']" />
     </div>
-    <router-link to="/users/61e3715e8c1ab4e7ba2537e7">Test</router-link>
   </div>
 </template>
 

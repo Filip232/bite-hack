@@ -28,11 +28,9 @@
                     <span><span :class="$styleUtils['bold']">Telephone:</span> {{ userDetails.tel }}</span>
                     <span><span :class="$styleUtils['bold']">Profile was created at:</span> {{ userDetails.created }}</span>
                     <span><span :class="$styleUtils['bold']">Average rating: </span> {{ userDetails.avgRating === -1 ? 'This user has no ratings': userDetails.avgRating }}</span>
-                    <router-link v-if="isMy" to="/users/edit" class="edit-profile" :class="$styleUtils['mt-6']">
-                        <CvButton>
-                            Edit profile info
-                        </CvButton>
-                    </router-link>
+                    <CvButton v-if="isMy" :class="$styleUtils['mt-6']">
+                        <router-link :to="`/users/edit`" class="edit-profile">Edit profile info</router-link>
+                    </CvButton>
                 </div>
             </div>
         </div>
@@ -43,10 +41,7 @@
                 <CvButton v-else-if="userDetails.review.id" @click="showModalEdit">Edit your review!</CvButton>
             </div>
             <div v-if="userDetails.review.id" class="your-comment-section">
-                <h4 class="d-f-ac">
-                    Your Comment
-                    <div @click="deleteComment"><TrashCan32 class="trash" /></div>
-                </h4>
+                <h4>Your Comment</h4>
                 <div class="comment-rating-section">
                     Rating: 
                     <FaceDizzy32 v-if="userDetails.review.rating === 1" class="rating-icon-comment" />
@@ -149,7 +144,7 @@
 import axios from 'axios';
 import dayjs from 'dayjs';
 import { CvLoading, CvButton, CvModal, CvTextArea } from '@carbon/vue/src';
-import { FaceActivated32, FaceCool32, FaceDizzy32, FaceDissatisfied32, FaceNeutral32, TrashCan32 } from '@carbon/icons-vue';
+import { FaceActivated32, FaceCool32, FaceDizzy32, FaceDissatisfied32, FaceNeutral32 } from '@carbon/icons-vue';
 import SingleComment from '@/components/SingleComment.vue';
 
 export default {
@@ -165,7 +160,6 @@ export default {
         FaceDissatisfied32,
         FaceNeutral32,
         SingleComment,
-        TrashCan32,
     },
     data() {
         return {
@@ -205,7 +199,12 @@ export default {
             },
         };
     },
-
+    watch: {
+        async $route() {
+            this.getUserData();
+            this.getReviews();
+        }
+    },
     async created() {
         this.getUserData();
         this.getReviews();
@@ -303,22 +302,6 @@ export default {
             this.edit.comment = userInfo.data?.review?.comment || '';
 
             this.isLoading = false;
-        },
-        async deleteComment() {
-            this.isLoading = true;
-            console.log(this.$store.state.user);
-            await axios.delete('/users/deleteReview', {
-                params: {
-                    posterId: this.$store.state.user.id,
-                    reviewerId: this.$route.params.id,
-                    token: this.$store.state.user.token,
-                }
-            }).catch(() => this.isLoading = false);
-
-            this.isLoading = false;
-            setTimeout(() => {
-                this.getUserData();
-            }, 500);
         }
     },
 }
@@ -423,17 +406,6 @@ h1 {
 
 .other-comments-section {
     padding: 30px 0 100px;
-}
-
-.d-f-ac {
-    display: flex;
-    align-items: center;
-}
-
-.trash {
-    margin-left: 10px;
-    color: $danger;
-    cursor: pointer;
 }
 </style>
 

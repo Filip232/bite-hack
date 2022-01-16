@@ -69,7 +69,7 @@ export default {
         this.form.username = data.username;
         this.form.name = data.name;
         this.form.surname = data.surname;
-        this.form.telephone = data.telephone;
+        this.form.telephone = data.tel;
     },
     methods: {
         async editUser() {
