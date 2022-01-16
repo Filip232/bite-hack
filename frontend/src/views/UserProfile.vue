@@ -168,6 +168,7 @@ export default {
                     id: this.$store.state.user.id,
                 }
             });
+            console.log(userInfo.data);
             this.userDetails.name = userInfo.data.name;
             this.userDetails.surname = userInfo.data.surname;
             this.userDetails.email = userInfo.data.email;
@@ -181,6 +182,7 @@ export default {
                 id: userInfo.data?.review?.id || null,
             }
             this.isLoading = false;
+            // console.log(this.userDetails.review);
         }
     },
 }
