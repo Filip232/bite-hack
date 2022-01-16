@@ -65,7 +65,6 @@ export default {
   async created() {
     const { data } = await axios.get('products/data/categories');
     this.categories = data.categories;
-    console.log(this.categories);
   },
   methods: {
     triggerModal() {
