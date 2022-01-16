@@ -174,7 +174,7 @@ router.get('/:id', (req, res) => {
 
   User.findById(user, (err, obj) => {
     if (err) return console.log(err);
-    Review.findOne({posterId: myId}, (err, myReview) => {
+    Review.findOne({posterId: myId, reviewedId: user}, (err, myReview) => {
       if (err) return console.log(err);
       let review;
       if (myReview) {

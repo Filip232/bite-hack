@@ -181,7 +181,7 @@ export default {
                 }
             },
             isLoading: false,
-            isMy: this.$store.state.user.id === this.$route.params.id,
+            isMy: String(this.$store.state.user.id) === String(this.$route.params.id),
             addCommentVisible: false,
             editCommentVisible: false,
             form: {

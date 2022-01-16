@@ -1,7 +1,7 @@
 <template>
   <div :class="[$style['info'], $styleUtils['c-primary'], $styleUtils['pt-13']]">
     <h1 :class="[$styleUtils['mb-6'], $style['info--logo']]">
-      NAZWA TO JEST OSTATNIE
+      Things at the attic
     </h1>
     <h2 :class="[$styleUtils['mb-5'], $style['info--sub']]">
       The place to reuse things
