@@ -204,9 +204,43 @@ router.get("/reviews/:page", (req, res) => {
 
       Review.countDocuments({reviewedId: userId}).exec((err, count) => {
         if (err) return console.log(err);
-        return res.status(200).send({total: count, page: page, pageSize: doc.length, users: doc, maxPage: Math.ceil(count/limit)});
+        return res.status(200).send({total: count, page: page, pageSize: doc.length, reviews: doc, maxPage: Math.ceil(count/limit)});
       });
     });
+});
+
+router.post('/updateUser', (req, res) => {
+  const username = req.body.username;
+  const name = req.body.name;
+  const surname = req.body.surname;
+  const tel = req.body.tel;
+  const password = req.body.password;
+  const email = req.body.email;
+  const userId = req.body.id;
+  const token = req.body.token;
+
+  User.findById(userId, (err, obj) => {
+    if (err) return console.log(err);
+    bcrypt.compare(token, obj.sessionToken, (err, result) => {
+      if (err) return console.log(err);
+      if (!result) return res.status(401).send({msg: 'Wrong token.'});
+
+      if (username) obj.username = username;
+      if (name) obj.name = name;
+      if (surname) obj.surname = surname;
+      if (tel) obj.tel = tel;
+      if (password) {
+        bcrypt.hash(password, 12, (err, hash) => {
+          if (err) return console.log(err);
+          obj.password = hash;
+          obj.save();
+        });
+      if (email) obj.email = email;
+      obj.save();
+      return res.status(200).send({msg: 'User updated'});
+      };
+    });
+  });
 });
 
 module.exports = router;
