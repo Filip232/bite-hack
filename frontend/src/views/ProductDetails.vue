@@ -67,7 +67,6 @@ export default {
   },
   methods: {
     changeImg(img) {
-      console.log(img);
       this.displayed = img;
     }
   }
