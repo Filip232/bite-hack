@@ -14,9 +14,14 @@ function updateAvgScore(userId) {
         if (err) return console.log(err);
         obj.avgRating = avg;
         obj.save();
-      })
-    })
-}
+        return console.log('done');
+      });
+    });
+};
+
+function getUsernameById(userId) {
+  return User.findOne({ '_id': userId });
+};
 
 router.post('/register', (req, res) => {
   const username = req.body.username;
@@ -169,11 +174,83 @@ router.delete('/deleteReview', (req, res) => {
 
 router.get('/:id', (req, res) => {
   const user = req.params.id;
+  const myId = req.query.id;
 
   User.findById(user, (err, obj) => {
     if (err) return console.log(err);
-    return res.status(200).send({name: obj.name, surname: obj.surname, username:obj.username, created: obj.created, email: obj.email, tel: obj.tel, imagePath: obj.imagePath, avgRating: obj.avgRating});
-  })
+    Review.findOne({posterId: myId}, (err, myReview) => {
+      if (err) return console.log(err);
+      let review;
+      if (myReview) {
+        review = {
+          rating: myReview.rating,
+          comment: myReview.comment,
+          id: myReview._id
+        } 
+      } else {
+        review = null;
+      };
+      return res.status(200).send({name: obj.name, surname: obj.surname, username:obj.username, created: obj.created, email: obj.email, tel: obj.tel, imagePath: obj.imagePath, avgRating: obj.avgRating, review});
+    });
+  });
+});
+
+router.get("/reviews/:page", (req, res) => {
+  const page = parseInt(req.params.page) || 0; //for next page pass 1 here
+  const limit = parseInt(req.query.limit) || 50;
+  const userId = req.query.userId;
+
+  Review.find({reviewedId: userId})
+    .sort({ update_at: -1 })
+    .skip(page * limit) //Notice here
+    .limit(limit)
+    .exec((err, doc) => {
+      if (err) return console.log(err);
+
+      Review.countDocuments({reviewedId: userId}).exec(async (err, count) => {
+        if (err) return console.log(err);
+        for (let i = 0; i < doc.length; i++) {
+          const userDetails = await getUsernameById(doc[i].posterId);
+          const toSave = { ...doc[i] }
+          toSave['_doc'].username = userDetails.username;
+        }
+        return res.status(200).send({total: count, page: page, pageSize: doc.length, reviews: doc, maxPage: Math.ceil(count/limit)});
+      });
+    });
+});
+
+router.post('/updateUser', (req, res) => {
+  const username = req.body.username;
+  const name = req.body.name;
+  const surname = req.body.surname;
+  const tel = req.body.tel;
+  const password = req.body.password;
+  const email = req.body.email;
+  const userId = req.body.id;
+  const token = req.body.token;
+
+  User.findById(userId, (err, obj) => {
+    if (err) return console.log(err);
+    bcrypt.compare(token, obj.sessionToken, (err, result) => {
+      if (err) return console.log(err);
+      if (!result) return res.status(401).send({msg: 'Wrong token.'});
+
+      if (username) obj.username = username;
+      if (name) obj.name = name;
+      if (surname) obj.surname = surname;
+      if (tel) obj.tel = tel;
+      if (password) {
+        bcrypt.hash(password, 12, (err, hash) => {
+          if (err) return console.log(err);
+          obj.password = hash;
+          obj.save();
+        });
+      if (email) obj.email = email;
+      obj.save();
+      return res.status(200).send({msg: 'User updated'});
+      };
+    });
+  });
 });
 
 module.exports = router;
