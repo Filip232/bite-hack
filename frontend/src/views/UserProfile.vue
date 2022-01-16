@@ -1,5 +1,18 @@
 <template>
     <div class="pt-80">
+        <CvToastNotification
+            :class="[
+                $styleUtils['notification'],
+                {
+                [$styleUtils['notification--opened']]: serverError,
+                [$styleUtils['notification--closed']]: !serverError
+                },
+            ]"
+            kind="error"
+            title="Error"
+            :caption="serverError"
+            @close="serverError = null"
+        />
         <div class="wrapper">
             <CvLoading :active="isLoading" :overlay="true" />
             <h1>User profile</h1>
@@ -28,24 +41,34 @@
             </div>
         </div>
         <CvModal
-        :visible="addCommentVisible"
-        @modal-hidden="addCommentVisible = false"
+            :visible="addCommentVisible"
+            @modal-hidden="modalHidden"
+            @primary-click="addReview"
         >
             <template #title>
                 Add review
             </template>
             <template #content>
-                <CvForm>
-                    <span>Rate user!</span>
-                    <div>
-                        <FaceDizzy32 class="rating-icon" />
-                        <FaceDissatisfied32 class="rating-icon" />
-                        <FaceNeutral32 class="rating-icon" />
-                        <FaceActivated32 class="rating-icon" />
-                        <FaceCool32 class="rating-icon" />
-                    </div>
-                    <CvTextArea label="Comment content" placeholder="comment" />
-                </CvForm>
+                <span class="rating-text">Rate user!</span>
+                <div>
+                    <FaceDizzy32 class="rating-icon" :class="form.rating === 1 ? 'choosen' : ''" @click="form.rating = 1" />
+                    <FaceDissatisfied32 class="rating-icon" :class="form.rating === 2 ? 'choosen' : ''" @click="form.rating = 2" />
+                    <FaceNeutral32 class="rating-icon" :class="form.rating === 3 ? 'choosen' : ''" @click="form.rating = 3" />
+                    <FaceActivated32 class="rating-icon" :class="form.rating === 4 ? 'choosen' : ''" @click="form.rating = 4" />
+                    <FaceCool32 class="rating-icon" :class="form.rating === 5 ? 'choosen' : ''" @click="form.rating = 5" />
+                </div>
+                <div v-if="ratingInvalid" :class="[$styleUtils['mb-3'], $styleUtils['c-danger']]" v-text="ratingInvalid" />
+                <CvTextArea
+                    label="Comment content"
+                    placeholder="comment"
+                />
+            </template>
+            <template #secondary-button>
+                Cancel
+            </template>
+            <template #primary-button>
+                Add Comment
+                <CvLoading v-if="isLoadingAddComment" :active="isLoadingAddComment" :class="$styleUtils['loading-small']"/>
             </template>
         </CvModal>
     </div>
@@ -53,7 +76,7 @@
 <script>
 import axios from 'axios';
 import dayjs from 'dayjs';
-import { CvLoading, CvButton, CvModal, CvForm, CvTextArea } from '@carbon/vue/src';
+import { CvLoading, CvButton, CvModal, CvTextArea } from '@carbon/vue/src';
 import { FaceActivated32, FaceCool32, FaceDizzy32, FaceDissatisfied32, FaceNeutral32 } from '@carbon/icons-vue';
 
 export default {
@@ -62,7 +85,6 @@ export default {
         CvLoading,
         CvButton,
         CvModal,
-        CvForm,
         CvTextArea,
         FaceActivated32,
         FaceCool32,
@@ -84,7 +106,13 @@ export default {
             isLoading: false,
             isMy: this.$store.state.user.id === this.$route.params.id,
             addCommentVisible: false,
-            console,
+            form: {
+                rating: null,
+                comment: '',
+            },
+            isLoadingAddComment: false,
+            ratingInvalid: null,
+            serverError: null,
         };
     },
     async created() {
@@ -104,6 +132,36 @@ export default {
         showModal() {
             this.addCommentVisible = true;
         },
+        modalHidden() {
+            this.addCommentVisible = false;
+            this.form.rating = null;
+        },
+        ratingValidation() {
+            if(this.form.rating === null) this.ratingInvalid = 'Rating is required';
+            else this.ratingInvalid = null;
+        },
+        async addReview() {
+            console.log('clicked');
+            this.ratingValidation();
+            if (this.form.rating === null) return;
+            this.serverError = null;
+            this.isLoadingAddComment = true;
+            await axios.post('users/postReview', {
+                posterId: this.$store.state.user.id,
+                reviewedId: this.$route.params.id,
+                rating: this.form.rating,
+                comment: this.form.comment,
+                token: this.$store.state.user.token,
+            }).catch(err => {
+                this.serverError = err.response.data.msg;
+                this.isLoading = false;
+            });
+
+            if (this.serverError) return;
+            
+            this.isLoadingAddComment = false;
+            this.addCommentVisible = false;
+        }
     },
 }
 </script>
@@ -173,6 +231,20 @@ h1 {
 .comments-title-wrapper {
     display: flex;
     justify-content: space-between;
+}
+
+.rating-icon {
+    margin: 10px 5px;
+    &:hover {
+        color: #e4cd05;
+    }
+}
+
+.rating-text {
+    font-size: 0.75rem;
+}
+.choosen {
+    color: $button-primary;
 }
 </style>
 
